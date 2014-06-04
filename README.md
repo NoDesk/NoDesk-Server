@@ -16,23 +16,24 @@ you can install dependencies for nodesk without altering your system
 you'll be sure to have the right version of any requirement.
 
 Install virtualenvwrapper (http://virtualenvwrapper.readthedocs.org/en/latest/):
-  apt-get install virtualenvwrapper
+
+  `apt-get install virtualenvwrapper`
 
 Create the virtualenv:
-  mkvirtualenv nodesk
+  `mkvirtualenv nodesk`
 
 You can exit the virtualenv with:
-  deactivate
+  `deactivate`
 
 To enter the virtualenv again:
-  workon nodesk
+  `workon nodesk`
 
 
 Run nodesk
 ------------
 
-  cd nodesk_server
-  ./manage.py runserver
+  `cd nodesk_server
+  ./manage.py runserver`
 
 
 
