@@ -32,8 +32,9 @@ To enter the virtualenv again:
 Run nodesk
 ------------
 
-  `cd nodesk_server
-  ./manage.py runserver`
+  `cd nodesk_server`
+
+  `./manage.py runserver`
 
 
 
