@@ -1,0 +1,53 @@
+The template for the file has to be written in YAML 1.1 with this syntax :
+
+A template file is a list of YAML map (called here FIELD) representing its fields.
+
+Example :
+
+- FIELD
+- FIELD
+- ...
+
+or 
+
+[ FIELD , FIELD...] (but it's less readable).
+
+
+A field map must have at least the "type" attribute set with the type of the field
+(if the "type" attribute is not set, the field will be ignored). The possible types
+are described in the Field_Types.md file.
+
+For example, "type : Number" set the type of the field to Number, meaning that
+the user will later enter for this field a number (and not a date for example).
+
+You can add more attribute to the map of the field, some are specific to a
+type (if it's set for a wrong type, it will be just ignored), and other are shared
+with all types. The former are describe in the file Types_Attributes.md,
+and for the later, here's a list :
+
+* name : the name of the field (will be displayed next to the input form of the field).
+* value : the value (or default value) of the field. For "Section" types, the value is
+a list of field maps.
+* properties : a list of properties for the field ( the possible values of the list
+are described in the file Properties_Values.md.
+
+Next is a concrete example of a template :
+
+
+-   type : Number
+    name : Question
+    value : 42
+
+-   type : String
+    name : Test
+    value : C'est pas faux
+    properties : [ right ]
+
+-   properties : [ bold , left ]
+    type : Section
+    name : 'Section name'
+    value :
+    -   type : Label
+        value : LABEL_EXAMPLE
+    -   type : Date
+        value : 13/02/92
