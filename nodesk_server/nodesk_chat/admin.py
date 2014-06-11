@@ -1,3 +1,4 @@
 from django.contrib import admin
+from nodesk_chat.models import Post
 
-# Register your models here.
+admin.site.register(Post)
