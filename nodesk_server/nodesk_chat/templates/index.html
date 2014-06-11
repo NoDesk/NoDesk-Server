@@ -1,0 +1,10 @@
+{% if latest_messages %}
+<ul>
+    {% for post in latest_messages %}
+    [{{ post.date }}] {{ post.user }} > {{ post.message }}
+    </br>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No messages yet.</p>
+{% endif %}
