@@ -28,7 +28,7 @@ and for the later, here's a list :
 * name : the name of the field (will be displayed next to the input form of the field).
 * value : the value (or default value) of the field. For "Section" types, the value is
 a list of field maps.
-* properties : a list of properties for the field ( the possible values of the list
+* options : a list of options for the field ( the possible values of the list
 are described in the file Properties_Values.md.
 
 Next is a concrete example of a template :
@@ -41,9 +41,9 @@ Next is a concrete example of a template :
 -   type : String
     name : Test
     value : C'est pas faux
-    properties : [ right ]
+    options : [ right ]
 
--   properties : [ bold , left ]
+-   options : [ bold , left ]
     type : Section
     name : 'Section name'
     value :

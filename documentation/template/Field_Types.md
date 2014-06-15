@@ -4,15 +4,18 @@ Field types available
 Maybe more to come but for now :
 
 * TextArea
-* Images
-* Sounds
-* Videos
-* Coordonates
+* TextLine
+* Image
+* Sound
+* Video
+* Coordinates
 * Date
 * Hour
-* Users
+* User
 * Creator
-* List
+* Email
+* Phone
+* Radiobox
 * Checkbox
 * Number (all numbers are float)
 
