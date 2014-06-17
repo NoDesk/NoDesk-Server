@@ -5,3 +5,7 @@ class UnrecognizedFieldType(Exception) :
         self.type = field_type
     def __str__(self) :
         return "%s : Unrecongnized type for the field %s" % (self.type,self.name)
+
+class SectionFieldInSectionField(Exception) :
+    def __str__(self) :
+        return "Cannot put a Section field inside a Section field"

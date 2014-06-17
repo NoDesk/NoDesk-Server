@@ -20,49 +20,49 @@
 
 
 
-def getTextAreaField() :
+def getTextAreaField(yaml,ident_space=4) :
     pass
 
-def getTextLineField() :
+def getTextLineField(yaml,ident_space=4) :
     pass
 
-def getImageField() :
+def getImageField(yaml,ident_space=4) :
     pass
 
-def getSoundField() :
+def getSoundField(yaml,ident_space=4) :
     pass
 
-def getVideoField() :
+def getVideoField(yaml,ident_space=4) :
     pass
 
-def getCoordinatesField() :
+def getCoordinatesField(yaml,ident_space=4) :
     pass
 
-def getDateField() :
+def getDateField(yaml,ident_space=4) :
     pass
 
-def getHourField() :
+def getHourField(yaml,ident_space=4) :
     pass
 
-def getUserField() :
+def getUserField(yaml,ident_space=4) :
     pass
 
-def getCreatorField() :
+def getCreatorField(yaml,ident_space=4) :
     pass
 
-def getEmailField() :
+def getEmailField(yaml,ident_space=4) :
     pass
 
-def getPhoneField() :
+def getPhoneField(yaml,ident_space=4) :
     pass
 
-def getRadioboxField() :
+def getRadioboxField(yaml,ident_space=4) :
     pass
 
-def getCheckboxField() :
+def getCheckboxField(yaml,ident_space=4) :
     pass
 
-def getNumberField() :
+def getNumberField(yaml,ident_space=4) :
     pass
 
 
