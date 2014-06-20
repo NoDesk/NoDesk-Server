@@ -10,7 +10,7 @@ Maybe more to come but for now :
 * Video
 * Coordinates
 * Date
-* Hour
+* Time
 * User
 * Creator
 * Email

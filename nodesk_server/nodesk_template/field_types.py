@@ -1,4 +1,5 @@
 #from django.db import models
+from nodesk_template.constants import *
 
 #field_types = {
 #    'TextArea' : models.TextField,
@@ -8,7 +9,7 @@
 #    'Video' : models.CharField, #
 #    'Coordinates' : models.CharField,
 #    'Date' : models.DateField, 
-#    'Hour' : models.TimeField, #
+#    'Time' : models.TimeField, #
 #    'User' : models.CharField, #
 #    'Creator' : models.CharField, #
 #    'Email' : models.EmailField,
@@ -20,66 +21,151 @@
 
 
 
-def getTextAreaField(yaml,ident_space=4) :
-    pass
+def get_TextArea_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.TextField(")
+    
+    #Add here the option of the django Field
+    
+    file.write(")\n")
 
-def getTextLineField(yaml,ident_space=4) :
-    pass
+def get_TextLine_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.CharField(")
+    
+    #Add here the option of the django Field
+    
+    file.write(")\n")
 
-def getImageField(yaml,ident_space=4) :
-    pass
+def get_Image_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.ImageField(")
+    
+    #Add here the option of the django Field
+    
+    file.write(")\n")
 
-def getSoundField(yaml,ident_space=4) :
-    pass
+def get_Sound_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.FileField(")
+    
+    #Add here the option of the django Field
+    
+    file.write(")\n")
 
-def getVideoField(yaml,ident_space=4) :
-    pass
+def get_Video_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.FileField(")
+    
+    #Add here the option of the django Field
+    
+    file.write(")\n")
 
-def getCoordinatesField(yaml,ident_space=4) :
-    pass
+def get_Coordinates_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.CharField(")
+    
+    #Add here the option of the django Field
+    
+    file.write(")\n")
 
-def getDateField(yaml,ident_space=4) :
-    pass
+def get_Date_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.DateField(")
+    
+    #Add here the option of the django Field
+    
+    file.write(")\n")
 
-def getHourField(yaml,ident_space=4) :
-    pass
+def get_Time_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.TimeField(")
+    
+    #Add here the option of the django Field
+    
+    file.write(")\n")
 
-def getUserField(yaml,ident_space=4) :
-    pass
+def get_User_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.CharField(")
+#    file.write("models.ForeignKey('User'") #XXX Maybe use a user reference
 
-def getCreatorField(yaml,ident_space=4) :
-    pass
+    #Add here the option of the django Field
+    
+    file.write(")\n")
 
-def getEmailField(yaml,ident_space=4) :
-    pass
+def get_Creator_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.CharField(")
+#    file.write("models.ForeignKey('User'") #XXX Maybe use a user reference
+    
+    #Add here the option of the django Field
+    
+    file.write(")\n")
 
-def getPhoneField(yaml,ident_space=4) :
-    pass
+def get_Email_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.EmailField(")
+    
+    #Add here the option of the django Field
+    
+    file.write(")\n")
 
-def getRadioboxField(yaml,ident_space=4) :
-    pass
+def get_Phone_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.CharField(")
+    
+    #Add here the option of the django Field
+    
+    file.write(")\n")
 
-def getCheckboxField(yaml,ident_space=4) :
-    pass
+def get_Radiobox_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.CharField(")
+    
+    #Add here the option of the django Field
+    
+    #file.write("choices=")
+    file.write(")\n")
 
-def getNumberField(yaml,ident_space=4) :
-    pass
+def get_Checkbox_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.BooleanField(")
+    
+    #Add here the option of the django Field
+    
+    file.write(")\n")
+
+def get_Number_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + "=")
+    file.write("models.FloatField(")
+    
+    #Add here the option of the django Field
+    
+    file.write(")\n")
+
+
+    
+def get_Section_field(yaml,file) :
+    raise Section_fieldInSection_field()
+
 
 
 field_types = {
-    'TextArea' : getTextAreaField,
-    'TextLine' : getTextLineField,
-    'Image' : getImageField,
-    'Sound' : getSoundField,
-    'Video' : getVideoField,
-    'Coordinates' : getCoordinatesField,
-    'Date' : getDateField, 
-    'Hour' : getHourField,
-    'User' : getUserField,
-    'Creator' : getCreatorField,
-    'Email' : getEmailField,
-    'Phone' : getPhoneField,
-    'Radiobox' : getRadioboxField,
-    'Checkbox' : getCheckboxField,
-    'Number' : getNumberField
+    'TextArea' : get_TextArea_field,
+    'TextLine' : get_TextLine_field,
+    'Image' : get_Image_field,
+    'Sound' : get_Sound_field,
+    'Video' : get_Video_field,
+    'Coordinates' : get_Coordinates_field,
+    'Date' : get_Date_field, 
+    'Time' : get_Time_field,
+    'User' : get_User_field,
+    'Creator' : get_Creator_field,
+    'Email' : get_Email_field,
+    'Phone' : get_Phone_field,
+    'Radiobox' : get_Radiobox_field,
+    'Checkbox' : get_Checkbox_field,
+    'Number' : get_Number_field,
+    'Section' : get_Section_field
 }
