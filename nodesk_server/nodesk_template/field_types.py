@@ -1,148 +1,151 @@
-#from django.db import models
-from nodesk_template.constants import *
-
-#field_types = {
-#    'TextArea' : models.TextField,
-#    'TextLine' : models.CharField,
-#    'Image' : models.CharField, #
-#    'Sound' : models.CharField, #
-#    'Video' : models.CharField, #
-#    'Coordinates' : models.CharField,
-#    'Date' : models.DateField, 
-#    'Time' : models.TimeField, #
-#    'User' : models.CharField, #
-#    'Creator' : models.CharField, #
-#    'Email' : models.EmailField,
-#    'Phone' : models.CharField,
-#    'Radiobox' : models.CharField, #
-#    'Checkbox' : models.BooleanField, #
-#    'Number' : models.FloatField
-#}
-
+#FIXME remove the try/catch block -> it's only used for debug purpose
+try:
+    from nodesk_template.constants import *
+except ImportError :
+    IDENTATION = ' '*4
 
 
 def get_TextArea_field(yaml,file) :
     file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.TextField(")
+    file.write("models.TextField(\n")
     
     #Add here the option of the django Field
     
-    file.write(")\n")
+    file.write(IDENTATION + ")\n")
 
 def get_TextLine_field(yaml,file) :
     file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.CharField(")
+    file.write("models.CharField(\n")
     
     #Add here the option of the django Field
     
-    file.write(")\n")
+    file.write(IDENTATION + ")\n")
 
 def get_Image_field(yaml,file) :
     file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.ImageField(")
+    file.write("models.ImageField(\n")
     
     #Add here the option of the django Field
     
-    file.write(")\n")
+    file.write(IDENTATION + ")\n")
 
 def get_Sound_field(yaml,file) :
     file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.FileField(")
+    file.write("models.FileField(\n")
     
     #Add here the option of the django Field
     
-    file.write(")\n")
+    file.write(IDENTATION + ")\n")
 
 def get_Video_field(yaml,file) :
     file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.FileField(")
+    file.write("models.FileField(\n")
     
     #Add here the option of the django Field
     
-    file.write(")\n")
+    file.write(IDENTATION + ")\n")
 
 def get_Coordinates_field(yaml,file) :
     file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.CharField(")
+    file.write("models.CharField(\n")
     
     #Add here the option of the django Field
     
-    file.write(")\n")
+    file.write(IDENTATION + ")\n")
 
 def get_Date_field(yaml,file) :
     file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.DateField(")
+    file.write("models.DateField(\n")
     
     #Add here the option of the django Field
     
-    file.write(")\n")
+    file.write(IDENTATION + ")\n")
 
 def get_Time_field(yaml,file) :
     file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.TimeField(")
+    file.write("models.TimeField(\n")
     
     #Add here the option of the django Field
     
-    file.write(")\n")
+    file.write(IDENTATION + ")\n")
 
 def get_User_field(yaml,file) :
     file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.CharField(")
+    file.write("models.CharField(\n")
 #    file.write("models.ForeignKey('User'") #XXX Maybe use a user reference
 
     #Add here the option of the django Field
     
-    file.write(")\n")
+    file.write(IDENTATION + ")\n")
 
 def get_Creator_field(yaml,file) :
     file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.CharField(")
+    file.write("models.CharField(\n")
 #    file.write("models.ForeignKey('User'") #XXX Maybe use a user reference
     
     #Add here the option of the django Field
     
-    file.write(")\n")
+    file.write(IDENTATION + ")\n")
 
 def get_Email_field(yaml,file) :
     file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.EmailField(")
+    file.write("models.EmailField(\n")
     
     #Add here the option of the django Field
     
-    file.write(")\n")
+    file.write(IDENTATION + ")\n")
 
 def get_Phone_field(yaml,file) :
     file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.CharField(")
+    file.write("models.CharField(\n")
     
     #Add here the option of the django Field
     
-    file.write(")\n")
+    file.write(IDENTATION + ")\n")
 
 def get_Radiobox_field(yaml,file) :
+    file.write(IDENTATION + yaml['name'] + '_choices_NODESK' + "=(\n")
+    if hasattr(yaml['value'],'__iter__') :
+        for value in yaml['value'] :
+            file.write(IDENTATION*2 + "('%s','%s'),\n" % (value,value))
+    else :
+        file.write(IDENTATION*2 + "('%s','%s')\n" % (yaml['value'],yaml['value']))
+    file.write(IDENTATION + ')\n')
+
     file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.CharField(")
+    file.write("models.CharField(\n")
+    file.write(IDENTATION*2 + "choices=" + yaml['name'] + '_choices_NODESK' + ',\n')
     
+
     #Add here the option of the django Field
     
-    #file.write("choices=")
-    file.write(")\n")
+    
+    file.write(IDENTATION + ")\n")
 
 def get_Checkbox_field(yaml,file) :
-    file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.BooleanField(")
+    if hasattr(yaml['value'],'__iter__') :
+        for value in yaml['value'] :
+            file.write(IDENTATION + yaml['name'] + '_' + value + "=")
+            file.write("models.BooleanField(\n")
     
-    #Add here the option of the django Field
+            #Add here the option of the django Field
     
-    file.write(")\n")
+            file.write(IDENTATION + ")\n")
+    else :
+        file.write(IDENTATION + yaml['name'] + '_' + yaml['value'] + "=")
+        file.write("models.BooleanField(\n")
+    
+        #Add here the option of the django Field
+    
+        file.write(IDENTATION + ")\n")
 
 def get_Number_field(yaml,file) :
     file.write(IDENTATION + yaml['name'] + "=")
-    file.write("models.FloatField(")
+    file.write("models.FloatField(\n")
     
     #Add here the option of the django Field
     
-    file.write(")\n")
+    file.write(IDENTATION + ")\n")
 
 
     
