@@ -47,11 +47,14 @@ def simple_field(field):
             value)
     return func
 
-def choices_field(field):
+def radiobox_field():
     # FIXME: add choices argument (from value)
-    return INDENTATION + 'models.%s()' % field
     def func(name, value):
-        return INDENTATION + 'models.%s()' % field
+    return func
+
+def checkbox_field():
+    def func(name, value):
+        pass
     return func
 
 
@@ -69,8 +72,8 @@ field_types_dict = {
     'Creator' : simple_field('CharField'), # FIXME: foreign key?
     'Email' : simple_field('EmailField'),
     'Phone' : simple_field('CharField'),
-    'Radiobox' : choices_field('BooleanField'),
-    'Checkbox' : choices_field('BooleanField'),
+    'Radiobox' : radiobox_field(),
+    'Checkbox' : checkbox_field(),
     'Number' : simple_field('FloatField'),
 #    'Section' : lambda value: raise Section_fieldInSection_field, # FIXME
 }
