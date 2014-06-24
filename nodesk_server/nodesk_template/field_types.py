@@ -1,23 +1,4 @@
 from .constants import INDENTATION
-#def get_Radiobox_field(yaml,file) :
-#    file.write(INDENTATION + yaml['name'] + '_choices_NODESK' + "=(\n")
-#    if hasattr(yaml['value'],'__iter__') :
-#        for value in yaml['value'] :
-#            file.write(INDENTATION*2 + "('%s','%s'),\n" % (value,value))
-#    else :
-#        file.write(INDENTATION*2 + "('%s','%s')\n" % (yaml['value'],yaml['value']))
-#    file.write(INDENTATION + ')\n')
-
-#    file.write(INDENTATION + yaml['name'] + "=")
-#    file.write("models.CharField(\n")
-#    file.write(INDENTATION*2 + "choices=" + yaml['name'] + '_choices_NODESK' + ',\n')
-
-
-    #Add here the option of the django Field
-
-
-#    file.write(INDENTATION + ")\n")
-
 #def get_Checkbox_field(yaml,file) :
 #    if hasattr(yaml['value'],'__iter__') :
 #        for value in yaml['value'] :
@@ -50,6 +31,17 @@ def simple_field(field):
 def radiobox_field():
     # FIXME: add choices argument (from value)
     def func(name, value):
+        field_string = 'models.CharField(choices=CHOICES_%s)' % name
+        choices_string = INDENTATION + 'CHOICES_' + name + ' = (\n'
+        if isinstance(value, str):
+            choices_string += INDENTATION*2 + "('%s','%s')\n" % (value, value)
+        if isinstance(value, list):
+            for choice in value:
+                choices_string += INDENTATION*2 + "('%s','%s')\n" % (choice, choice)
+        choices_string += INDENTATION + ')\n'
+
+        return choices_string + field_string
+
     return func
 
 def checkbox_field():
