@@ -1,5 +1,4 @@
-from nodesk_template.exceptions import Section_fieldInSection_field
-from nodesk_templates.constants import INDENTATION
+from .constants import INDENTATION
 #def get_Radiobox_field(yaml,file) :
 #    file.write(INDENTATION + yaml['name'] + '_choices_NODESK' + "=(\n")
 #    if hasattr(yaml['value'],'__iter__') :
@@ -41,7 +40,7 @@ from nodesk_templates.constants import INDENTATION
 #    raise Section_fieldInSection_field()
 
 def simple_field(field, value):
-    return INDENTATION + 'models.%s(default=%s)' % (field, value)
+    return INDENTATION + "models.%s(default='%s')" % (field, value)
 
 def choices_field(field, value):
     # FIXME: add choices argument (from value)
