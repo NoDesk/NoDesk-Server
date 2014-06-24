@@ -15,5 +15,5 @@ class FieldTypeTestCase(TestCase):
         func = field_types.field_types_dict.get(textarea['type'], None)
         self.assertFalse(func is None)
         self.assertEqual(func(textarea['value']),
-                         INDENTATION + 'models.TextField(default=%s)' % textarea['field'])
+                         "    models.TextField(default='TextArea')")
 
