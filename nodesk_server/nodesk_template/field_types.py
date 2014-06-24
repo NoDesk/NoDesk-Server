@@ -47,7 +47,7 @@ def radiobox_field():
 
 def checkbox_field():
     def func(name, value):
-        pass
+        return ''
     return func
 
 def raise_exception(e):
