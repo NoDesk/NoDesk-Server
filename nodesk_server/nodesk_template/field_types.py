@@ -23,7 +23,7 @@ from .exceptions import SectionFieldInSectionField
 
 def simple_field(field):
     def func(name, value):
-        return INDENTATION + "%s = models.%s(default='%s')" % (
+        return INDENTATION + "%s = models.%s(default='%s')\n" % (
             name,
             field,
             value)
@@ -32,7 +32,7 @@ def simple_field(field):
 def radiobox_field():
     # FIXME: add choices argument (from value)
     def func(name, value):
-        field_string = 'models.CharField(choices=CHOICES_%s)' % name
+        field_string = INDENTATION + 'models.CharField(choices=CHOICES_%s)\n' % name
         choices_string = INDENTATION + 'CHOICES_' + name + ' = (\n'
         if isinstance(value, str):
             choices_string += INDENTATION*2 + "('%s','%s')\n" % (value, value)
