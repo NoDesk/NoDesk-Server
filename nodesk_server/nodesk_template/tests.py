@@ -1,14 +1,13 @@
-from nodesk_templates import field_types
-from nodesk_template.constants import INDENTATION
+from . import field_types
+from .constants import INDENTATION
 
 from django.test import TestCase
 
 import yaml
 
-
 class FieldTypeTestCase(TestCase):
     def setUp(self):
-        with open('test_data/template_test.yaml', 'r') as template:
+        with open('nodesk_template/test_data/template_test.yaml', 'r') as template:
             self.template = yaml.load(template)
 
     def test_textarea(self):
