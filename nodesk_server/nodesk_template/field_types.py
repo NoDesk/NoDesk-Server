@@ -58,7 +58,6 @@ def choices_field(field):
 
 field_types_dict = {
     'TextArea' : simple_field('TextField'),
-    'TextLine' : simple_field('TextLine'),
     'Image' : simple_field('models.ImageField'),
     'Sound' : simple_field('models.FileField'),
     'Video' : simple_field('models.FileField'),
@@ -72,6 +71,7 @@ field_types_dict = {
     'Radiobox' : choices_field('models.BooleanField'),
     'Checkbox' : choices_field('models.BooleanField'),
     'Number' : simple_field('models.FloatField'),
+    'TextLine' : simple_field('CharField'),
 #    'Section' : lambda value: raise Section_fieldInSection_field, # FIXME
 }
 
