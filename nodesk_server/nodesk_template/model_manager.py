@@ -56,7 +56,7 @@ def generate_model_from_YAML(file_path) :
 
                 else:
                     func = field_types.get(field['type'], None)
-                    if model_string is None:
+                    if func is None:
                         raise UnrecognizedFieldType(field['type'], field['name'])
 
                     model_file.write(func(field['value']))
