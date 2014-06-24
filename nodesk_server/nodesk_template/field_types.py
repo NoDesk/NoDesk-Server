@@ -41,11 +41,11 @@ from nodesk_templates.constants import INDENTATION
 #    raise Section_fieldInSection_field()
 
 def simple_field(field, value):
-    return '    models.%s(default=%s)' % (field, value)
+    return INDENTATION + 'models.%s(default=%s)' % (field, value)
 
 def choices_field(field, value):
     # FIXME: add choices argument (from value)
-    return '    models.%s()' % field
+    return INDENTATION + 'models.%s()' % field
 
 
 
