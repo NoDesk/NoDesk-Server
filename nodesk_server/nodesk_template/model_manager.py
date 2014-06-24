@@ -5,7 +5,7 @@ import hashlib
 import os
 
 import nodesk_template.models
-import nodesk_template.exceptions
+from nodesk_template.exceptions import UnrecognizedFieldType
 from nodesk_template.constants import INDENTATION
 
 from field_types import field_types
@@ -25,7 +25,7 @@ def generate_model_from_YAML(file_path) :
     #Get the name of the yaml file (with extension) from the path of the file
     filename = os.path.basename(file_path)
     #Get the name of the yaml file without the extension
-    filename = os.path.splitext(filename)[0]
+    filename, _ = os.path.splitext(filename)
     filename = filename + "_" + template_hash
 
     #FIXME
@@ -43,7 +43,7 @@ def generate_model_from_YAML(file_path) :
 
         model_path = '{1}/{2}'.format(nodesk_template.models.path[0], filename)
         with open(model_path, 'w') as model_file:
-            model_file.write(get_header(class_name))
+            model_file.write(get_header(filename))
 
             for field in template_yaml:
                 if (field['type'] == 'Section'):
