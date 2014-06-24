@@ -67,8 +67,3 @@ field_types_dict = {
 #    'Section' : lambda value: raise Section_fieldInSection_field, # FIXME
 }
 
-
-def field_yaml_to_model(field, name, value) :
-    return '    {name} = {field}()\n'.format(
-        name,
-        field_types_dict[field])
