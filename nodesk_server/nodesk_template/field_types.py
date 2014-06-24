@@ -39,31 +39,39 @@ from .constants import INDENTATION
 #def get_Section_field(yaml,file) :
 #    raise Section_fieldInSection_field()
 
-def simple_field(field, value):
-    return INDENTATION + "models.%s(default='%s')" % (field, value)
+def simple_field(field):
+    def func(name, value):
+        return INDENTATION + "%s = models.%s(default='%s')" % (
+            name,
+            field,
+            value)
+    return func
 
-def choices_field(field, value):
+def choices_field(field):
     # FIXME: add choices argument (from value)
     return INDENTATION + 'models.%s()' % field
+    def func(name, value):
+        return INDENTATION + 'models.%s()' % field
+    return func
 
 
 
 field_types_dict = {
-    'TextArea' : lambda value: simple_field('TextField', value),
-    'TextLine' : lambda value: simple_field('TextLine', value),
-    'Image' : lambda value: simple_field('models.ImageField', value),
-    'Sound' : lambda value: simple_field('models.FileField', value),
-    'Video' : lambda value: simple_field('models.FileField', value),
-    'Coordinates' : lambda value: simple_field('models.CharField', value),
-    'Date' : lambda value: simple_field('models.DateField', value),
-    'Time' : lambda value: simple_field('models.TimeField', value),
-    'User' : lambda value: simple_field('models.CharField', value),# FIXME foreign key?
-    'Creator' : lambda value: simple_field('models.CharField', value), # FIXME foreign key?
-    'Email' : lambda value: simple_field('models.EmailField', value),
-    'Phone' : lambda value: simple_field('models.CharField', value),
-    'Radiobox' : lambda value: choices_field('models.BooleanField', value), # FIXME
-    'Checkbox' : lambda value: choices_field('models.BooleanField', value), # FIXME
-    'Number' : lambda value: simple_field('models.FloatField', value),
+    'TextArea' : simple_field('TextField'),
+    'TextLine' : simple_field('TextLine'),
+    'Image' : simple_field('models.ImageField'),
+    'Sound' : simple_field('models.FileField'),
+    'Video' : simple_field('models.FileField'),
+    'Coordinates' : simple_field('models.CharField'),
+    'Date' : simple_field('models.DateField'),
+    'Time' : simple_field('models.TimeField'),
+    'User' : simple_field('models.CharField'), # FIXME: foreign key?
+    'Creator' : simple_field('models.CharField'), # FIXME: foreign key?
+    'Email' : simple_field('models.EmailField'),
+    'Phone' : simple_field('models.CharField'),
+    'Radiobox' : choices_field('models.BooleanField'),
+    'Checkbox' : choices_field('models.BooleanField'),
+    'Number' : simple_field('models.FloatField'),
 #    'Section' : lambda value: raise Section_fieldInSection_field, # FIXME
 }
 

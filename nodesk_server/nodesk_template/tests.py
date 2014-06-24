@@ -13,6 +13,6 @@ class FieldTypeTestCase(TestCase):
         textarea = self.template[0]
         func = field_types.field_types_dict.get(textarea['type'], None)
         self.assertFalse(func is None)
-        self.assertEqual(func(textarea['value']),
-                         "    models.TextField(default='TextArea')")
+        self.assertEqual(func(textarea['name'], textarea['value']),
+                         "    TextArea_ = models.TextField(default='TextArea')")
 
