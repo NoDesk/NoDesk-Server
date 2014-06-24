@@ -1,25 +1,6 @@
 from .constants import INDENTATION
 from .exceptions import SectionFieldInSectionField
-#def get_Checkbox_field(yaml,file) :
-#    if hasattr(yaml['value'],'__iter__') :
-#        for value in yaml['value'] :
-#            file.write(INDENTATION + yaml['name'] + '_' + value + "=")
-#            file.write("models.BooleanField(\n")
 
-            #Add here the option of the django Field
-
-#            file.write(INDENTATION + ")\n")
-#    else :
-#        file.write(INDENTATION + yaml['name'] + '_' + yaml['value'] + "=")
-#        file.write("models.BooleanField(\n")
-
-        #Add here the option of the django Field
-
-#        file.write(INDENTATION + ")\n")
-
-
-#def get_Section_field(yaml,file) :
-#    raise Section_fieldInSection_field()
 
 def simple_field(field):
     def func(name, value):
@@ -47,6 +28,7 @@ def radiobox_field():
 
 def checkbox_field():
     def func(name, value):
+        # FIXME: I'm empty :(
         return ''
     return func
 
