@@ -58,20 +58,20 @@ def choices_field(field):
 
 field_types_dict = {
     'TextArea' : simple_field('TextField'),
-    'Image' : simple_field('models.ImageField'),
-    'Sound' : simple_field('models.FileField'),
-    'Video' : simple_field('models.FileField'),
-    'Coordinates' : simple_field('models.CharField'),
-    'Date' : simple_field('models.DateField'),
-    'Time' : simple_field('models.TimeField'),
-    'User' : simple_field('models.CharField'), # FIXME: foreign key?
-    'Creator' : simple_field('models.CharField'), # FIXME: foreign key?
-    'Email' : simple_field('models.EmailField'),
-    'Phone' : simple_field('models.CharField'),
-    'Radiobox' : choices_field('models.BooleanField'),
-    'Checkbox' : choices_field('models.BooleanField'),
-    'Number' : simple_field('models.FloatField'),
     'TextLine' : simple_field('CharField'),
+    'Image' : simple_field('ImageField'),
+    'Sound' : simple_field('FileField'),
+    'Video' : simple_field('FileField'),
+    'Coordinates' : simple_field('CharField'),
+    'Date' : simple_field('DateField'),
+    'Time' : simple_field('TimeField'),
+    'User' : simple_field('CharField'), # FIXME: foreign key?
+    'Creator' : simple_field('CharField'), # FIXME: foreign key?
+    'Email' : simple_field('EmailField'),
+    'Phone' : simple_field('CharField'),
+    'Radiobox' : choices_field('BooleanField'),
+    'Checkbox' : choices_field('BooleanField'),
+    'Number' : simple_field('FloatField'),
 #    'Section' : lambda value: raise Section_fieldInSection_field, # FIXME
 }
 
