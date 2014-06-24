@@ -1,4 +1,5 @@
 from .constants import INDENTATION
+from .exceptions import SectionFieldInSectionField
 #def get_Checkbox_field(yaml,file) :
 #    if hasattr(yaml['value'],'__iter__') :
 #        for value in yaml['value'] :
@@ -49,6 +50,10 @@ def checkbox_field():
         pass
     return func
 
+def raise_exception(e):
+    def func(name, value):
+        raise e
+    return func
 
 
 field_types_dict = {
@@ -67,6 +72,6 @@ field_types_dict = {
     'Radiobox' : radiobox_field(),
     'Checkbox' : checkbox_field(),
     'Number' : simple_field('FloatField'),
-#    'Section' : lambda value: raise Section_fieldInSection_field, # FIXME
+    'Section' : raise_exception(SectionFieldInSectionField), # TESTME
 }
 
