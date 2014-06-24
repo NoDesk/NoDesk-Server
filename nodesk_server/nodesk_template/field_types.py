@@ -1,40 +1,40 @@
 from nodesk_template.exceptions import Section_fieldInSection_field
-
+from nodesk_templates.constants import INDENTATION
 #def get_Radiobox_field(yaml,file) :
-#    file.write(IDENTATION + yaml['name'] + '_choices_NODESK' + "=(\n")
+#    file.write(INDENTATION + yaml['name'] + '_choices_NODESK' + "=(\n")
 #    if hasattr(yaml['value'],'__iter__') :
 #        for value in yaml['value'] :
-#            file.write(IDENTATION*2 + "('%s','%s'),\n" % (value,value))
+#            file.write(INDENTATION*2 + "('%s','%s'),\n" % (value,value))
 #    else :
-#        file.write(IDENTATION*2 + "('%s','%s')\n" % (yaml['value'],yaml['value']))
-#    file.write(IDENTATION + ')\n')
+#        file.write(INDENTATION*2 + "('%s','%s')\n" % (yaml['value'],yaml['value']))
+#    file.write(INDENTATION + ')\n')
 
-#    file.write(IDENTATION + yaml['name'] + "=")
+#    file.write(INDENTATION + yaml['name'] + "=")
 #    file.write("models.CharField(\n")
-#    file.write(IDENTATION*2 + "choices=" + yaml['name'] + '_choices_NODESK' + ',\n')
+#    file.write(INDENTATION*2 + "choices=" + yaml['name'] + '_choices_NODESK' + ',\n')
 
 
     #Add here the option of the django Field
 
 
-#    file.write(IDENTATION + ")\n")
+#    file.write(INDENTATION + ")\n")
 
 #def get_Checkbox_field(yaml,file) :
 #    if hasattr(yaml['value'],'__iter__') :
 #        for value in yaml['value'] :
-#            file.write(IDENTATION + yaml['name'] + '_' + value + "=")
+#            file.write(INDENTATION + yaml['name'] + '_' + value + "=")
 #            file.write("models.BooleanField(\n")
 
             #Add here the option of the django Field
 
-#            file.write(IDENTATION + ")\n")
+#            file.write(INDENTATION + ")\n")
 #    else :
-#        file.write(IDENTATION + yaml['name'] + '_' + yaml['value'] + "=")
+#        file.write(INDENTATION + yaml['name'] + '_' + yaml['value'] + "=")
 #        file.write("models.BooleanField(\n")
 
         #Add here the option of the django Field
 
-#        file.write(IDENTATION + ")\n")
+#        file.write(INDENTATION + ")\n")
 
 
 #def get_Section_field(yaml,file) :

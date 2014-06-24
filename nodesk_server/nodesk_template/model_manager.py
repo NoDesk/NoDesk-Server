@@ -6,7 +6,7 @@ import os
 
 import nodesk_template.models
 import nodesk_template.exceptions
-from nodesk_template.constants import IDENTATION
+from nodesk_template.constants import INDENTATION
 
 from field_types import field_types
 
@@ -73,8 +73,8 @@ class {1}(models.Model):
 
 def get_meta_class(file) :
     file.write('\n'*4)
-    file.write(IDENTATION + "class Meta:\n")
-    file.write(IDENTATION*2 + "\"\"\"Meta Class for your model.\"\"\"\n")
-    file.write(IDENTATION*2 + "app_label = '%s'\n" % APP_NAME)
+    file.write(INDENTATION + "class Meta:\n")
+    file.write(INDENTATION*2 + "\"\"\"Meta Class for your model.\"\"\"\n")
+    file.write(INDENTATION*2 + "app_label = '%s'\n" % APP_NAME)
 
 
