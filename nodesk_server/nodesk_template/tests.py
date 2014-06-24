@@ -8,7 +8,7 @@ import yaml
 
 class FieldTypeTestCase(TestCase):
     def setUp(self):
-        with open('data/template_test.yaml', 'r') as template:
+        with open('test_data/template_test.yaml', 'r') as template:
             self.template = yaml.load(template)
 
     def test_textarea(self):
