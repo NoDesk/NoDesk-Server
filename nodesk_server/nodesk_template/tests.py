@@ -1,5 +1,4 @@
 from . import field_types
-from .constants import INDENTATION
 
 from django.test import TestCase
 
