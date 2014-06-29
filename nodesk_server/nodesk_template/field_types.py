@@ -19,7 +19,7 @@ def radiobox_field():
             choices_string += INDENTATION*2 + "('%s','%s')\n" % (value, value)
         if isinstance(value, list):
             for choice in value:
-                choices_string += INDENTATION*2 + "('%s','%s')\n" % (choice, choice)
+                choices_string += INDENTATION*2 + "('%s','%s'),\n" % (choice, choice)
         choices_string += INDENTATION + ')\n'
 
         return choices_string + field_string
