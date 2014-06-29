@@ -28,8 +28,18 @@ def radiobox_field():
 
 def checkbox_field():
     def func(name, value):
-        # FIXME: I'm empty :(
-        return ''
+        fields = ''
+        # FIXME: factor this
+        # (with a inner function computing the string for a value)
+        if isinstance(value, str):
+            fields += INDENTATION + name + '_' + value + ' = '
+            fields += 'models.BooleanField()\n'
+        if isinstance(value, list):
+            for v in value:
+                fields += INDENTATION + name + '_' + v + ' = '
+                fields += 'models.BooleanField()\n'
+        return fields
+
     return func
 
 def raise_exception(e):
