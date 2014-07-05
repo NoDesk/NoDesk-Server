@@ -6,11 +6,9 @@ class Template(models.Model):
             max_length=64,
             primary_key=True)
     model_hash = models.CharField(
-            max_length=64
-            null=False)
+            max_length=64)
     name = models.CharField(
-            max_length=100,
-            null=False)
+            max_length=100)
     yaml = models.TextField()
     model = models.TextField()
 
