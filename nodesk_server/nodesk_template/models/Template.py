@@ -11,6 +11,7 @@ class Template(models.Model):
             max_length=100)
     yaml = models.TextField()
     model = models.TextField()
-
+    alive = models.BooleanField(
+            default=False)
     class Meta:
         app_label = 'nodesk_template'
