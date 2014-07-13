@@ -63,10 +63,9 @@ def generate_template_model_from_YAML_file(file_path):
     #Hash the content of the yaml file/dump produced by PyYAML (equivalent)
     basename = os.path.splitext(os.path.basename(file_path))[0]
     yaml_hash = hash_content(yaml_content)
-    basename = basename + "_" + yaml_hash
     
     model_content = generate_template_model_from_YAML(yaml_content)
-    model_content.format(classname=basename)
+    model_content.format( basename + "_" + yaml_hash )
     model_hash = hash_content(model_content)
     
     model = Template(
@@ -110,8 +109,10 @@ def sync_model(template_directory_path):
             #model.full_clean() #FIXME
             #model.save() #FIXME
 
-            model_path = '{0}/{1}.py'.format(nodesk_template.models.__path__[0],
-                                  model.name)
+            model_path = '{0}/{1}_{2}.py'.format(
+                    nodesk_template.models.__path__[0],
+                    model.name
+                    model.yaml_hash)
             with open(model_path, "w") as model_file:
                 model_file.write(model.model)
 
@@ -121,8 +122,10 @@ def sync_model(template_directory_path):
         #the users). If one of those two is false, then we rewrite the content
         #of the file
         else:
-            model_path = '{0}/{1}.py'.format(nodesk_template.models.__path__[0],
-                                  model.name)
+            model_path = '{0}/{1}_{2}.py'.format(
+                    nodesk_template.models.__path__[0],
+                    model.name
+                    model.yaml_hash)
             if os.path.isfile(model_path) is False :
                 with open(file_path, "w+") as model_file:
                     model_hash = hash_content(model_file.read())
