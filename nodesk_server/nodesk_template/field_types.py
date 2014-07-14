@@ -16,7 +16,7 @@ def media_field(field):
             name,
             field,
             value)
-    return fun
+    return func
 
 def radiobox_field():
     # FIXME: add choices argument (from value)
@@ -59,9 +59,9 @@ def raise_exception(e):
 field_types_dict = {
     'TextArea' : simple_field('TextField'),
     'TextLine' : simple_field('CharField'),
-    'Image' : simple_field('ImageField'),
-    'Sound' : simple_field('FileField'),
-    'Video' : simple_field('FileField'),
+    'Image' : media_field('ImageField'),
+    'Sound' : media_field('FileField'),
+    'Video' : media_field('FileField'),
     'Coordinates' : simple_field('CharField'),
     'Date' : simple_field('DateField'),
     'Time' : simple_field('TimeField'),

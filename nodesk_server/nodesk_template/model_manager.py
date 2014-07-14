@@ -1,21 +1,22 @@
 #from django.db import models
 import yaml
-from nodesk_template.crypto import hash_content
 import os
 
+import nodesk_template
 from nodesk_template.models import *
 from nodesk_template.exceptions import UnrecognizedFieldType
 from nodesk_template.constants import INDENTATION
+from nodesk_template.crypto import hash_content
+from nodesk_template.field_types import field_types_dict
 
-from field_types import field_types_dict
 
 APP_NAME = "nodesk_template"
 
 def generate_field_name(initial_name, fieldnames_count_dict) :
-    name = '_'.joint(initial_name.split())
+    name = '_'.join(initial_name.split())
     fieldname_count = fieldnames_count_dict.get(name, 0)
     fieldnames_count_dict[name] = fieldname_count + 1
-    return name + '_' + fieldname_count
+    return "{0}_{1}".format(name, fieldname_count)
 
 
 def generate_template_model_from_YAML(yaml_python):
@@ -36,20 +37,16 @@ def generate_template_model_from_YAML(yaml_python):
                     raise UnrecognizedFieldType(field_['value'])
                 field_name = generate_field_name(field_['name'], fieldnames_count)
                 field['field_name'] = field_name
-                template_model = (
-                    template_model + 
-                    func(field_name, field_['value'], fieldnames_count))
+                template_model = template_model + func(field_name, field_['value'])
 
         else:
             func = field_types_dict.get(field['type'], None)
             if func is None:
                 raise UnrecognizedFieldType(field['type'])
 
-            field_name = generate_field_name(field_['name'], fieldnames_count)
+            field_name = generate_field_name(field['name'], fieldnames_count)
             field['field_name'] = field_name
-            template_model = (
-                template_model +
-                func(field_name, field['value'], fieldnames_count))
+            template_model = template_model + func(field_name, field['value'])
 
     template_model = template_model + get_meta_class()
 
@@ -64,8 +61,8 @@ class {classname}(models.Model):
 
 def get_static_fields():
     list_field = []
-    list_field.append(IDENTATION + "dossier_name = models.CharField()")
-    list_field.append(IDENTATION + "dossier_date = models.DateField()")
+    list_field.append(INDENTATION + "dossier_name = models.CharField()")
+    list_field.append(INDENTATION + "dossier_date = models.DateField()")
     return '\n'.join(list_field) + '\n'
 
 
@@ -86,7 +83,7 @@ def generate_template_model_from_YAML_file(file_path):
     
     yaml_python = yaml.load(yaml_string)
     model_content = generate_template_model_from_YAML(yaml_python)
-    model_content.format(classname=basename + "_" + yaml_hash )
+    model_content = model_content.format(classname=basename + "_" + yaml_hash )
     model_hash = hash_content(model_content)
     
     model = Template(
@@ -106,6 +103,7 @@ def sync_model(template_directory_path) :
     # with the content saved in the Template
     # We also set 'alive' for all Template to false : if they are alive, they
     # will be set to true after that
+    """
     for model in Template.objects.all().update(alive=False) :
         model_path = '{0}/{1}_{2}.py'.format(
                 nodesk_template.models.__path__[0],
@@ -118,7 +116,7 @@ def sync_model(template_directory_path) :
                     model_file.seek(0)
                     model_file.write(model.model)
                     model_file.truncate()
-
+    """
 
 
     # List the template files inside the template directory.
