@@ -10,6 +10,14 @@ def simple_field(field):
             value)
     return func
 
+def media_field(field):
+    def func(name, value):
+        return INDENTATION + "%s = models.%s(default='%s',upload_to='{classname}')\n" % (
+            name,
+            field,
+            value)
+    return fun
+
 def radiobox_field():
     # FIXME: add choices argument (from value)
     def func(name, value):

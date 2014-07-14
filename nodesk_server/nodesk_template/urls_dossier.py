@@ -17,7 +17,7 @@ urlpatterns = patterns(
         url(
             r'^/(?P<template_id>[0-9]+)/'
             '(?P<dossier_id>[0-9]+)/'
-            '(?P<attachement_id>[a-zA-Z0-9]+)/?$',
+            '(?P<attachement_field_name>.+)/?$',
             views.get_dossier_attachement),
         url(
             r'^/(?P<template_id>[0-9]+)/'

@@ -22,7 +22,7 @@ def generate_template_model_from_YAML(yaml_python):
     model = None
     template_model = ""
    
-    template_model = template_model + get_header()
+    template_model = template_model + get_header() + get_static_fields()
     #if the name of the field is found multiple times in the yaml
     #we need to create fields in the model with unique name.
     #We will append to the field name its rank. This rank will be the last one+1
@@ -62,6 +62,12 @@ def get_header():
 class {classname}(models.Model):
 """
 
+def get_static_fields():
+    list_field = []
+    list_field.append(IDENTATION + "dossier_name = models.CharField()")
+    list_field.append(IDENTATION + "dossier_date = models.DateField()")
+    return '\n'.join(list_field) + '\n'
+
 
 def get_meta_class():
     return '\n'*2 + INDENTATION + "class Meta:\n" + INDENTATION*2 + \
@@ -80,7 +86,7 @@ def generate_template_model_from_YAML_file(file_path):
     
     yaml_python = yaml.load(yaml_string)
     model_content = generate_template_model_from_YAML(yaml_python)
-    model_content.format( basename + "_" + yaml_hash )
+    model_content.format(classname=basename + "_" + yaml_hash )
     model_hash = hash_content(model_content)
     
     model = Template(
