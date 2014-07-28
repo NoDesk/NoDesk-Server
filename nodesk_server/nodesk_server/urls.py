@@ -11,6 +11,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     
-    url(r'^template', include('nodesk_template.urls_template')),
-    url(r'^dossier', include('nodesk_template.urls_dossier')),
+    url(r'^template/', include('nodesk_template.urls_template')),
+    url(r'^dossier/', include('nodesk_template.urls_dossier')),
     )

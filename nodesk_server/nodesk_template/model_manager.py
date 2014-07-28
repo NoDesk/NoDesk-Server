@@ -3,7 +3,7 @@ import yaml
 import os
 
 import nodesk_template
-from nodesk_template.models import *
+from nodesk_template.models import Template
 from nodesk_template.exceptions import UnrecognizedFieldType
 from nodesk_template.constants import INDENTATION
 from nodesk_template.crypto import hash_content
@@ -61,7 +61,7 @@ class {classname}(models.Model):
 
 def get_static_fields():
     list_field = []
-    list_field.append(INDENTATION + "dossier_name = models.CharField()")
+    list_field.append(INDENTATION + "dossier_name = models.TextField()")
     list_field.append(INDENTATION + "dossier_date = models.DateField()")
     return '\n'.join(list_field) + '\n'
 
@@ -133,9 +133,10 @@ def sync_model(template_directory_path) :
         with open(template_file, "r") as yaml_file :
             yaml_hash = hash_content(yaml.dump(yaml.load(yaml_file.read())))
         
-        #FIXME
-        #model = Template.objects.get(yaml_hash__exact=yaml_hash)
-        model = None
+        try:
+            model = Template.objects.get(yaml_hash__exact=yaml_hash)
+        except :
+            model = None
 
         # if the model was not found in the db, that mean the yaml was never
         # parsed to generate de its model, so we generate the model
@@ -148,6 +149,6 @@ def sync_model(template_directory_path) :
                     model.yaml_hash)
             with open(model_path, "w") as model_file:
                 model_file.write(model.model)
-        #model.alive=True FIXME
-        #model.full_clean() FIXME
-        #model.save() FIXME
+        model.alive=True
+        model.full_clean()
+        model.save()

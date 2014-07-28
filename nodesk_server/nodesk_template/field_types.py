@@ -58,17 +58,17 @@ def raise_exception(e):
 
 field_types_dict = {
     'TextArea' : simple_field('TextField'),
-    'TextLine' : simple_field('CharField'),
+    'TextLine' : simple_field('TextField'),
     'Image' : media_field('ImageField'),
     'Sound' : media_field('FileField'),
     'Video' : media_field('FileField'),
-    'Coordinates' : simple_field('CharField'),
+    'Coordinates' : simple_field('TextField'),
     'Date' : simple_field('DateField'),
     'Time' : simple_field('TimeField'),
-    'User' : simple_field('CharField'), # FIXME: foreign key?
-    'Creator' : simple_field('CharField'), # FIXME: foreign key?
+    'User' : simple_field('TextField'), # FIXME: foreign key?
+    'Creator' : simple_field('TextField'), # FIXME: foreign key?
     'Email' : simple_field('EmailField'),
-    'Phone' : simple_field('CharField'),
+    'Phone' : simple_field('TextField'),
     'Radiobox' : radiobox_field(),
     'Checkbox' : checkbox_field(),
     'Number' : simple_field('FloatField'),

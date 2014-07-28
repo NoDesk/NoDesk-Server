@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import json
+import time
 from nodesk_template.models import *
 from django.core.exceptions import ObjectDoesNotExist
 import mimetypes
@@ -13,7 +14,8 @@ def is_authorized(template_id) :
 def is_logged() :
     return True
 
-
+def ping(request) :
+    return HttpResponse(time.strftime("%c"))
 
 def get_template_list(request) :
     response = HttpResponse()
@@ -38,7 +40,7 @@ def get_template_list(request) :
             json_content.append(content)
         
         response.write(json.dumps(json_content))
-        response["content_type"] = "application/json"
+        response["Content-Type"] = "application/json"
     else :
         response["status"] = 401
     
@@ -51,8 +53,8 @@ def get_template(request, template_id) :
         try :
             template = Template.objects.get(pk=template_id)
             response['Content-Disposition'] = \
-                    'attachment; filename="{0}"'.format(template.name)
-            response["content_type"] = "application/prs.yaml"
+                    'attachment; filename="{0}.yaml"'.format(template.name)
+            response["Content-Type"] = "application/prs.yaml"
             response.write(template.yaml)
         except ObjectDoesNotExist :
             response["status"] = 404
@@ -60,8 +62,6 @@ def get_template(request, template_id) :
         response["status"] = 401
     
     return response
-
-
 
 
 dossier_model_object_dict = {}
@@ -102,8 +102,8 @@ def get_dossier_list(request, template_id) :
                 json_content.append(content)
             
             response.write(json.dumps(json_content))
-            response["content_type"] = "application/json"
-       else :
+            response["Content-Type"] = "application/json"
+        else :
             response['status'] = 404
     else :
         response["status"] = 401
@@ -124,10 +124,10 @@ def get_dossier(request, template_id, dossier_id) :
                 json_content = serializers.serialize('json', [dossier])
                 
                 response.write(json_content)
-                response["content_type"] = "application/json"
+                response["Content-Type"] = "application/json"
             except ObjectDoesNotExist :
                 response['status'] = 404
-       else :
+        else :
             response['status'] = 404
     else :
         response["status"] = 401
@@ -160,7 +160,7 @@ def get_dossier_attachement(request, template_id, dossier_id, attachement_field_
                 dossier = dossier_model.objects.get(pk = dossier_id)
                 exec('attachement_field = dossier.' + attachement_field_name)
                 attachement = dehydrate(attachement_field)
-                response.write(attachement['file']
+                response.write(attachement['file'])
                 response['Content-Type'] = attachement['content-type']
                 response['Content-Disposition'] = \
                         'attachment; filename="{0}"'.format(attachement['name'])
@@ -168,7 +168,7 @@ def get_dossier_attachement(request, template_id, dossier_id, attachement_field_
                 #Handle last modified/ if modified since TODO ?
             except (ObjectDoesNotExist,AttributeError) as e :
                 response['status'] = 404
-       else :
+        else :
             response['status'] = 404
     else :
         response["status"] = 401
