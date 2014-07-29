@@ -57,7 +57,7 @@ def get_template(request, template_id) :
             response["Content-Type"] = "application/prs.yaml"
             response.write(template.yaml)
         except ObjectDoesNotExist :
-            response["status"] = 404
+            reponse = HttpResponseNotFound()
     else :
         response["status"] = 401
     
@@ -79,32 +79,52 @@ def get_dossier_model_object(template_id) :
     return template_model_object_dict[template_id]
 
 
-
 def get_dossier_list_all(request) :
     #return HttpResponse("get dossier list all")
-    return HttpResponse(status = 404)
+    return HttpResponseNotFound()
 
 
-def get_dossier_list(request, template_id) :
+def save_field_value_in_dossier(field_value_list,dossier_object):
+    for (field,value) in field_value_list :
+        setattr(dossier_object,field,value)
+
+
+def get_dossier_list_post_new_dossier(request, template_id) :
     response = HttpResponse()
     if is_logged() :
-        dossier_model = get_template_model_object(template_id)
-        if dossier_model is not None :
-            json_content = []
-            dossier_queryset = dossier_model.objects.all()
-            for dossier in dossier_queryset :
-                content = {}
-                
-                content['name'] = dossier.dossier_name
-                content['date'] = dossier.dossier_date
-                content['pk'] = dossier.pk
-                
-                json_content.append(content)
-            
-            response.write(json.dumps(json_content))
-            response["Content-Type"] = "application/json"
-        else :
-            response['status'] = 404
+        try :
+            dossier_model = get_template_model_object(template_id)
+            if dossier_model is not None :
+                if request.method == 'GET':
+                    json_content = []
+                    dossier_queryset = dossier_model.objects.all()
+                    for dossier in dossier_queryset :
+                        content = {}
+                        
+                        content['name'] = dossier.dossier_name
+                        content['date'] = dossier.dossier_date
+                        content['pk'] = dossier.pk
+                        
+                        json_content.append(content)
+                    
+                    response.write(json.dumps(json_content))
+                    response["Content-Type"] = "application/json"
+                elif request.method == 'POST' :
+                    body = json.load(request.body)
+                    dossier = dossier_model()
+                    save_field_value_in_dossier(body.items(),dossier)
+                    dossier.full_clean()
+                    dossier.save()
+
+                    json_content = serializers.serialize('json', [dossier])                    
+                    response.write(json_content)
+                    response["Content-Type"] = "application/json"
+                else :
+                    raise Exception()
+            else :
+                raise Exception()
+        except :
+            response = HttpResponseNotFound()
     else :
         response["status"] = 401
     
@@ -113,22 +133,40 @@ def get_dossier_list(request, template_id) :
 
 
 
-def get_dossier(request, template_id, dossier_id) :
+def get_dossier_post_dossier(request, template_id, dossier_id) :
     response = HttpResponse()
     if is_logged() and is_authorized(template_id) :
-        dossier_model = get_template_model_object(template_id)
-        if dossier_model is not None :
-            try :
-                dossier = dossier_model.objects.get(pk = dossier_id)
-                
-                json_content = serializers.serialize('json', [dossier])
-                
-                response.write(json_content)
-                response["Content-Type"] = "application/json"
-            except ObjectDoesNotExist :
-                response['status'] = 404
-        else :
-            response['status'] = 404
+        try :
+            dossier_model = get_template_model_object(template_id)
+            if dossier_model is not None :
+                    dossier = dossier_model.objects.get(pk = dossier_id)
+                    if request.method == 'GET' :
+                        json_content = serializers.serialize('json', [dossier])
+                        response.write(json_content)
+                        response["Content-Type"] = "application/json"
+
+                    #if its a POST request, it means the user want to modify the dossier
+                    #so we save the new value into its object, ans send a code 200
+                    elif request.method == 'POST' :
+                        if request["Content-Type"] == "application/json"
+                            body = request.body
+                            if isinstance(body,dict) : body = body.items()
+                            
+                            save_field_value_in_dossier(body,dossier)
+                            dossier.full_clean() #XXX Is it a good idea to do that?
+                            dossier.save()
+                        elif request["Content-Type"] == "multipart/form-data" :
+                            for file in request.FILES :
+                                setattr(dossier, file, request.FILES[file])
+                            dossier.save()
+                        else :
+                            raise Exception()
+                    else :
+                        raise Exception()
+            else :
+                raise Exception()
+        except :
+            response = HttpResponseNotFound()
     else :
         response["status"] = 401
     return response
@@ -151,29 +189,43 @@ def dehydrate(file_field):
     return ret
 
 
-def get_dossier_attachement(request, template_id, dossier_id, attachement_field_name) :
+def get_field_value_post_field_value(request, template_id, dossier_id, field_name) :
     response = HttpResponse()
     if is_logged() and is_authorized(template_id) :
-        dossier_model = get_template_model_object(template_id)
-        if dossier_model is not None :
-            try :
+        try :
+            dossier_model = get_template_model_object(template_id)
+            if dossier_model is not None :
                 dossier = dossier_model.objects.get(pk = dossier_id)
-                exec('attachement_field = dossier.' + attachement_field_name)
-                attachement = dehydrate(attachement_field)
-                response.write(attachement['file'])
-                response['Content-Type'] = attachement['content-type']
-                response['Content-Disposition'] = \
-                        'attachment; filename="{0}"'.format(attachement['name'])
-                reponse['Content-Length'] = attachement['size']
-                #Handle last modified/ if modified since TODO ?
-            except (ObjectDoesNotExist,AttributeError) as e :
-                response['status'] = 404
-        else :
-            response['status'] = 404
+                field = getattr(dossier,field_name)
+                #field now contain the field object
+                if request.method == 'GET':
+                    #If it's a file field, we generate the base64 equivalent and write it
+                    if isinstance(field,FieldFile) :
+                        attachement = dehydrate(field)
+                        response.write(attachement['file'])
+                        response['Content-Type'] = attachement['content-type']
+                        response['Content-Disposition'] = \
+                                'attachment; filename="{0}"'.format(attachement['name'])
+                        reponse['Content-Length'] = attachement['size']
+                        #Handle last modified/ if modified since TODO ?
+                    else :
+                        #getting a non-FieldFile field is not allowed here
+                        #It should be done with get_dossier_post_dossier
+                        response = HttpResponse(status_code=501)
+#                elif request.method == 'POST' :
+#                    if isinstance(field,FieldFile) :
+#                        #OLDTODO
+#                        pass
+#                    else :
+#                        #setting a non-FieldFile field is not allowed here
+#                        #It should be done with get_dossier_post_dossier
+#                        response = HttpResponse(status_code=501)
+                else :
+                    raise Exception()
+            else :
+                raise Exception()                
+        except :    
+            response = HttpResponseNotFound()
     else :
         response["status"] = 401
     return response
-
-
-def add_new_dossier(request, template_id) :
-    return HttpResponse("Add new dossier with template " + template_id)

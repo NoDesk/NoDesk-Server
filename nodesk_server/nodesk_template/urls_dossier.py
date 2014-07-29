@@ -9,18 +9,14 @@ urlpatterns = [
             views.get_dossier_list_all),
         url(
             r'^(?P<template_id>[0-9]+)/?$',
-            views.get_dossier_list) ,
+            views.get_dossier_list_post_new_dossier) ,
         url(
             r'^(?P<template_id>[0-9]+)/'
             '(?P<dossier_id>[0-9]+)/?$',
-            views.get_dossier),
+            views.get_dossier_post_dossier),
         url(
             r'^(?P<template_id>[0-9]+)/'
             '(?P<dossier_id>[0-9]+)/'
-            '(?P<attachement_field_name>.+)/?$',
-            views.get_dossier_attachement),
-        url(
-            r'^(?P<template_id>[0-9]+)/'
-            'new/?$' ,
-            views.add_new_dossier),
+            '(?P<field_name>.+)/?$',
+            views.get_field_value_post_field_value),
         ]
