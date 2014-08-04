@@ -12,7 +12,7 @@ def simple_field(field):
 
 def media_field(field):
     def func(name, value):
-        return INDENTATION + "%s = models.%s(default='%s',upload_to='{classname}')\n" % (
+        return INDENTATION + "%s = models.%s(upload_to=Template.upload_to_func({classname}))\n" % (
             name,
             field,
             value)
@@ -59,7 +59,7 @@ def raise_exception(e):
 field_types_dict = {
     'TextArea' : simple_field('TextField'),
     'TextLine' : simple_field('TextField'),
-    'Image' : media_field('ImageField'),
+    'Image' : media_field('FileField'),
     'Sound' : media_field('FileField'),
     'Video' : media_field('FileField'),
     'Coordinates' : simple_field('TextField'),

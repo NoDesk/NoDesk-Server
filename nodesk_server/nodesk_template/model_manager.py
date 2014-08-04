@@ -56,6 +56,7 @@ def generate_template_model_from_YAML(yaml_python):
 
 def get_header():
     return """from django.db import models
+from nodesk_template.models import Template
 
 class {classname}(models.Model):
 """
