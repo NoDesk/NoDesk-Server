@@ -10,6 +10,7 @@ class Template(models.Model):
     name = models.CharField(
             max_length=100)
     yaml = models.TextField()
+    json = models.TextField()
     model = models.TextField()
     alive = models.BooleanField(
             default=False)

@@ -1,5 +1,6 @@
 #from django.db import models
 import yaml
+import json
 import os
 
 import nodesk_template
@@ -30,7 +31,7 @@ def generate_template_model_from_YAML(yaml_python):
     #So we need to keep track of the count, and its done with this dict.
     fieldnames_count = {}
     for field in yaml_python:
-        if (field['type'] == 'Section'):
+        if field['type'] == 'Section' :
             for field_ in field['value']:
                 func = field_types_dict.get(field['type'], None)
                 if func is None:
@@ -91,6 +92,7 @@ def generate_template_model_from_YAML_file(file_path):
             model_hash=model_hash,
             name=basename,
             yaml=yaml.dump(yaml_python),
+            json=json.dumps(yaml_python),
             model=model_content)
     return model
 
