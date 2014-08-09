@@ -10,6 +10,6 @@ urlpatterns = [
             r'^$',
             views.get_template_list),
         url(
-            r'^(?P<template_id>[a-zA-Z0-9]+)/?$',
+            r'^(?P<template_id>[0-9]+)/?$',
             views.get_template),
     ]
