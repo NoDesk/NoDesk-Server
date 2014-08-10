@@ -1,10 +1,10 @@
-=Template HTTP API
+#Template HTTP API
 
 The template API is accessible at the URL : http://<NODESK_URL>/template/<TEMPLATE_API>.
 Depending on <TEMPLATE_API>, you can access the different part of the API (describe by a regex) :
 
-=='^$' : nothing
-===GET request
+##'^$' : nothing
+###GET request
 You will get the list of the templates stored by NoDesk-Server.
 You can add to the GET request 2 parameters :
  * alive : 
@@ -22,11 +22,17 @@ You can add to the GET request 2 parameters :
     of the template.
 
 The JSON served will look like :
+```
+{
+    "name":<template_name>,
+    "pk":<template_id>,
+    "json":<template_description_in_JSON>
+}
+```
+The field "json" is only present if the paramenter json=true has been added the the GET request.
 
-TODO
-
-=='[0-9]+/?' == '^<template_id>/?$'
-===GET request
+##'[0-9]+/?' == '^<template_id>/?$'
+###GET request
 You will get the JSON equivalent to the YAML
 describing the template.  
 There is no argument for now.
