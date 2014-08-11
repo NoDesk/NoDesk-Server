@@ -84,3 +84,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = 'media'
+
+
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+SESSION_COOKIE_HTTPONLY = False
