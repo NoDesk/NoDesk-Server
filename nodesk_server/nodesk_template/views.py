@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.fields.files import *
 from django.views import static
 
-from django.views.decorators.csrf import csrf_exempt                                          
+from django.views.decorators.csrf import csrf_exempt 
 
 import json
 import time
@@ -19,7 +19,7 @@ from nodesk_template.models import *
 def is_authorized(template_id) :
     return True
 
-def is_logged() :
+def is_logged(request) :
     return True
 
 def ping(request) :
@@ -27,7 +27,7 @@ def ping(request) :
 
 def get_template_list(request) :
     response = HttpResponse()
-    if is_logged() :
+    if is_logged(request) :
         list_type = request.GET.get('alive', None)
         if list_type is None :
             template_query_set = Template.objects.all()
@@ -57,7 +57,7 @@ def get_template_list(request) :
 
 def get_template(request, template_id) :
     response = HttpResponse()
-    if is_logged() and is_authorized(template_id) :
+    if is_logged(request) and is_authorized(template_id) :
         try :
             template = Template.objects.get(pk=template_id)
             response['Content-Disposition'] = \
@@ -98,7 +98,7 @@ def save_field_value_in_dossier(field_value_list,dossier_object):
 @csrf_exempt
 def get_dossier_list_post_new_dossier(request, template_id) :
     response = HttpResponse()
-    if is_logged() :
+    if is_logged(request) :
         try :
             dossier_model = get_dossier_model_object(template_id)
             if dossier_model is not None :
@@ -129,13 +129,14 @@ def get_dossier_list_post_new_dossier(request, template_id) :
                         json_content = serializers.serialize('json', [dossier])                    
                         response.write(json_content)
                         response["Content-Type"] = "application/json"
-                    elif "multipart/form-data" in request.META["CONTENT_TYPE"] :
+                    #elif "multipart/form-data" in request.META["CONTENT_TYPE"] :
                         #FIXME
                         ##create the dossier ahead of time, to generate a pk for it
                         #dossier.save()
                         #for file in request.FILES :
                         #    setattr(dossier, file, request.FILES[file])
                         #dossier.save()
+                        pass
                     else :
                         raise Exception()
                 else :
@@ -154,14 +155,14 @@ def get_dossier_list_post_new_dossier(request, template_id) :
 @csrf_exempt
 def get_dossier_post_dossier(request, template_id, dossier_id) :
     response = HttpResponse()
-    if is_logged() and is_authorized(template_id) :
+    if is_logged(request) and is_authorized(template_id) :
         try :
             dossier_model = get_dossier_model_object(template_id)
             if dossier_model is not None :
                     dossier = dossier_model.objects.get(pk = dossier_id)
                     if request.method == 'GET' :
                         json_content = serializers.serialize('json', [dossier])
-                        response.write(json_content)
+                        response.write(json_content[0])
                         response["Content-Type"] = "application/json"
 
                     #if its a POST request, it means the user want to modify the dossier
@@ -195,7 +196,7 @@ def get_dossier_post_dossier(request, template_id, dossier_id) :
 
 def get_field_value_post_field_value(request, template_id, dossier_id, field_name) :
     response = HttpResponse()
-    if is_logged() and is_authorized(template_id) :
+    if is_logged(request) and is_authorized(template_id) :
         try :
             dossier_model = get_dossier_model_object(template_id)
             if dossier_model is not None :
