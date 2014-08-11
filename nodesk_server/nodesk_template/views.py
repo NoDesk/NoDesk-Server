@@ -136,6 +136,7 @@ def get_dossier_list_post_new_dossier(request, template_id) :
                         #for file in request.FILES :
                         #    setattr(dossier, file, request.FILES[file])
                         #dossier.save()
+                        pass
                     else :
                         raise Exception()
                 else :
