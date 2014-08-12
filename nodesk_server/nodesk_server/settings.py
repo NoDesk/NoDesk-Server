@@ -87,5 +87,9 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = 'media'
 
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+SESSION_COOKIE_HTTPONLY = False
+
 #FIXME
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True

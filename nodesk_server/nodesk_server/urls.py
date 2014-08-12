@@ -13,4 +13,6 @@ urlpatterns = patterns('',
     
     url(r'^template/', include('nodesk_template.urls_template')),
     url(r'^dossier/', include('nodesk_template.urls_dossier')),
+    
+    url(r'^auth/', include('nodesk_authentication.urls')),
     )
