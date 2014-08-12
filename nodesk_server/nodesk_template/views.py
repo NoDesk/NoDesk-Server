@@ -20,7 +20,7 @@ def is_authorized(template_id) :
     return True
 
 def is_logged(request) :
-    return True
+    return request.user.is_authenticated()
 
 def ping(request) :
     return HttpResponse(time.strftime("%c"))
@@ -50,7 +50,7 @@ def get_template_list(request) :
         response.write(json.dumps(json_content))
         response["Content-Type"] = "application/json"
     else :
-        response["status"] = 401
+        response = HttpResponse(status = 401)
     
     return response
 
@@ -67,7 +67,7 @@ def get_template(request, template_id) :
         except ObjectDoesNotExist :
             reponse = HttpResponseNotFound()
     else :
-        response["status"] = 401
+        response = HttpResponse(status = 401)
     
     return response
 
@@ -146,7 +146,7 @@ def get_dossier_list_post_new_dossier(request, template_id) :
         except :
             response = HttpResponseNotFound()
     else :
-        response["status"] = 401
+        response = HttpResponse(status = 401)
     
     return response
 
@@ -162,9 +162,8 @@ def get_dossier_post_dossier(request, template_id, dossier_id) :
                     dossier = dossier_model.objects.get(pk = dossier_id)
                     if request.method == 'GET' :
                         json_content = serializers.serialize('json', [dossier])
-                        response.write(json_content[0])
+                        response.write(json_content[1:-1])
                         response["Content-Type"] = "application/json"
-
                     #if its a POST request, it means the user want to modify the dossier
                     #so we save the new value into its object, ans send a code 200
                     elif request.method == 'POST' :
@@ -189,7 +188,7 @@ def get_dossier_post_dossier(request, template_id, dossier_id) :
         except Exception as e:
             response = HttpResponseNotFound()
     else :
-        response["status"] = 401
+        response = HttpResponse(status = 401)
     return response
 
 
@@ -226,5 +225,5 @@ def get_field_value_post_field_value(request, template_id, dossier_id, field_nam
         except Exception as e :
             response = HttpResponseNotFound()
     else :
-        response["status"] = 401
+        response = HttpResponse(status = 401)
     return response
