@@ -6,7 +6,7 @@ Depending on <DOSSIER_API>, you can access the different part of the API :
 ##'^$'
 Not used for now : will result in an code 404.
 
-##'^[0-9]+/?$' == '^<template_id>/?$'
+##'^[0-9]+/?$' == '^\<template_id\>/?$'
 ###GET request
 You will get the list of dossier using the template with the ID <template_id>.
 You won't receive the dossiers' content, just general informations about them
@@ -45,7 +45,7 @@ For example :
 }
 ```
 
-##'^[0-9]+/[0-9]+/?$' == '^<template\_id>/<dossier_id>/?$'
+##'^[0-9]+/[0-9]+/?$' == '^\<template\_id\>/\<dossier_id\>/?$'
 ###GET request
 You will get all the field value for the dossier using the template <template_id>
 and with the ID <dossier_id>. The response will be in JSON, and it will look like :
@@ -89,7 +89,7 @@ field name of the template used by the dossier you wish to upload to.
 You really just can think about it like if you submit an html <form> to upload files.
 
 
-##'^[0-9]+/[0-9]+/.+/?$' == '^<template\_id>/<dossier_id>/<field_name>/?$'
+##'^[0-9]+/[0-9]+/.+/?$' == '^\<template\_id\>/\<dossier\_id\>/\<field\_name\>/?$'
 For now, this URL is only used to get the media field of a dossier (audio, video, photo...)  
 **The format of the URL may change in the future**
 
