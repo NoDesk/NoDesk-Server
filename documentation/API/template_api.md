@@ -31,7 +31,7 @@ The JSON served will look like :
 ```
 The field "json" is only present if the paramenter json=true has been added the the GET request.
 
-##'[0-9]+/?' == '^<template_id>/?$'
+##'[0-9]+/?' == '^\<template_id\>/?$'
 ###GET request
 You will get the JSON equivalent to the YAML
 describing the template.  
