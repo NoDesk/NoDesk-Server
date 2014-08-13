@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.http import *
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.datastructures import MultiValueDictKeyError
+import json
 import time
 
 from nodesk_server import settings
@@ -17,8 +18,9 @@ def login(request):
             username = request.GET['username']
             password = request.GET['password']
         elif request.method == 'POST':
-            username = request.POST['username']
-            password = request.POST['password']
+            params = json.loads(request.body)
+            username = params['username']
+            password = params['password']
 #    except MultiValueDictKeyError as e:
     except:
         username = ""
