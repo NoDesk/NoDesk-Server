@@ -18,7 +18,10 @@ def login(request):
             username = request.GET['username']
             password = request.GET['password']
         elif request.method == 'POST':
-            params = json.loads(request.body)
+            if 'application/json' in request.META['CONTENT_TYPE'] :
+                params = json.loads(request.body)
+            else :
+                params = request.POST
             username = params['username']
             password = params['password']
 #    except MultiValueDictKeyError as e:
