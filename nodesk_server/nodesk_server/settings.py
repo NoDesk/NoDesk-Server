@@ -87,6 +87,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 MEDIA_ROOT = 'media'
 
@@ -116,7 +117,7 @@ AUTH_LDAP_SERVER_URI = "ldap://localhost"
 
 AUTH_LDAP_BIND_DN = "cn=admin,dc=example,dc=com"
 AUTH_LDAP_BIND_PASSWORD = "admin"
-AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=peoples,dc=example,dc=com",
+AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=people,dc=example,dc=com",
     ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
 
 # Set up the basic group parameters.

@@ -1,16 +1,16 @@
 # Create top-level object in domain
-#dn: dc=example,dc=com
-#objectClass: top
-#objectClass: dcObject
-#objectclass: organization
-#o: Nodesk Example Organization
-#dc: example
-#description: Nodesk LDAP Example 
+dn: dc=example,dc=com
+objectClass: top
+objectClass: dcObject
+objectclass: organization
+o: Nodesk Example Organization
+dc: example
+description: Nodesk LDAP Example 
 
 
-dn: ou=people,dc=example,dc=com
+dn: ou=peoples,dc=example,dc=com
 objectClass: organizationalUnit
-ou: people
+ou: peoples
 
 dn: ou=groups,dc=example,dc=com
 objectClass: organizationalUnit
@@ -23,7 +23,7 @@ cn: nodesk
 gidNumber: 50000
 
 
-dn: uid=test,ou=people,dc=example,dc=com
+dn: uid=test,ou=peoples,dc=example,dc=com
 objectClass: top
 objectClass: posixAccount
 objectClass: inetOrgPerson

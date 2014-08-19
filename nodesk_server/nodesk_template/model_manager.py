@@ -47,7 +47,7 @@ def generate_template_model_from_YAML(yaml_python):
 
             field_name = generate_field_name(field['name'], fieldnames_count)
             field['field_name'] = field_name
-            template_model = template_model + func(field_name, field['value'])
+            template_model = template_model + func(field_name, field.get('value',None))
 
     template_model = template_model + get_meta_class()
 
@@ -85,7 +85,7 @@ def generate_template_model_from_YAML_file(file_path):
     
     yaml_python = yaml.load(yaml_string)
     model_content = generate_template_model_from_YAML(yaml_python)
-    model_content = model_content.format(classname=basename + "_" + yaml_hash )
+    model_content = model_content.format(classname=basename.replace(' ','_') + "_" + yaml_hash )
     model_hash = hash_content(model_content)
     
     model = Template(
@@ -110,7 +110,7 @@ def sync_model(template_directory_path) :
     for model in Template.objects.all().update(alive=False) :
         model_path = '{0}/{1}_{2}.py'.format(
                 nodesk_template.models.__path__[0],
-                model.name,
+                model.name.replace(" ","_"),
                 model.yaml_hash )
         if os.path.isfile(model_path) is False :
             with open(file_path, "w+") as model_file:
@@ -148,7 +148,7 @@ def sync_model(template_directory_path) :
 
             model_path = '{0}/{1}_{2}.py'.format(
                     nodesk_template.models.__path__[0],
-                    model.name,
+                    model.name.replace(" ","_"),
                     model.yaml_hash)
             with open(model_path, "w") as model_file:
                 model_file.write(model.model)

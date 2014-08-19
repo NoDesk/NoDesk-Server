@@ -12,10 +12,9 @@ def simple_field(field):
 
 def media_field(field):
     def func(name, value):
-        return INDENTATION + "%s = models.%s(upload_to=Template.upload_to_func({classname}))\n" % (
+        return INDENTATION + "%s = models.%s(upload_to=Template.upload_to_func('{classname}'))\n" % (
             name,
-            field,
-            value)
+            field)
     return func
 
 def radiobox_field():
