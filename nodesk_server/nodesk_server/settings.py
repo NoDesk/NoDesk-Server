@@ -9,8 +9,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
-import ldap
+import os, ldap, yaml, inspect, sys
 from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -24,7 +23,6 @@ SECRET_KEY = 'r!y0qlmz!&%f2)l8gp1lqur_79q!3drueaa_+o94@@5e@l^^j1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -42,6 +40,8 @@ INSTALLED_APPS = (
     'corsheaders',
     'nodesk_server',
     'nodesk_template',
+    'nodesk_authentication',
+    'nodesk_admin',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -55,6 +55,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'nodesk_server.urls'
+#TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 WSGI_APPLICATION = 'nodesk_server.wsgi.application'
 
@@ -104,6 +105,17 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
+#FIXME
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+
+
+
+
+SETTINGS_YAML_FILEPATH = BASE_DIR + '/nodesk_server/settings.yaml'
+with open(SETTINGS_YAML_FILEPATH) as yaml_file :
+    settings_yaml = yaml.load(yaml_file.read())
 
 """
 import logging
@@ -113,18 +125,17 @@ logger.setLevel(5)
 """
 
 # Baseline configuration.
-AUTH_LDAP_SERVER_URI = "ldap://localhost"
+AUTH_LDAP_SERVER_URI = settings_yaml['AUTH_LDAP_SERVER_URI']['set']
 
-AUTH_LDAP_BIND_DN = "cn=admin,dc=example,dc=com"
-AUTH_LDAP_BIND_PASSWORD = "admin"
-AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=people,dc=example,dc=com",
-    ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+AUTH_LDAP_BIND_DN = settings_yaml['AUTH_LDAP_BIND_DN']['set']
+AUTH_LDAP_BIND_PASSWORD = settings_yaml['AUTH_LDAP_BIND_PASSWORD']['set']
+AUTH_LDAP_USER_SEARCH = LDAPSearch(settings_yaml['AUTH_LDAP_USER_SEARCH']['set'],
+    ldap.SCOPE_SUBTREE, settings_yaml['AUTH_LDAP_USER_SEARCH_FILTER']['set'])
 
 # Set up the basic group parameters.
-AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=groups,dc=example,dc=com",
-    ldap.SCOPE_SUBTREE, "(objectClass=groupOfNames)"
-)
-AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr="cn")
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch(settings_yaml['AUTH_LDAP_GROUP_SEARCH']['set'],
+    ldap.SCOPE_SUBTREE, settings_yaml['AUTH_LDAP_GROUP_SEARCH_FILTER']['set'])
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr=settings_yaml['AUTH_LDAP_GROUP_TYPE']['set'])
 
 # Populate the Django user from the LDAP directory.
 AUTH_LDAP_USER_ATTR_MAP = {
@@ -135,8 +146,6 @@ AUTH_LDAP_USER_ATTR_MAP = {
 
 # This is the default, but I like to be explicit.
 AUTH_LDAP_ALWAYS_UPDATE_USER = True
-
-
 """
 # Simple group restrictions
 AUTH_LDAP_REQUIRE_GROUP = "cn=nodesk,ou=groups,dc=example,dc=com"
@@ -165,8 +174,3 @@ AUTH_LDAP_FIND_GROUP_PERMS = True
 AUTH_LDAP_CACHE_GROUPS = True
 AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
 """
-
-
-#FIXME
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
