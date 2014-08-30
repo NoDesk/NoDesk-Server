@@ -3,6 +3,7 @@ import yaml
 import json
 import os
 
+from django.core.management import call_command
 import nodesk_template
 from nodesk_template.models import Template
 from nodesk_template.exceptions import UnrecognizedFieldType
@@ -56,7 +57,7 @@ def generate_template_model_from_YAML(yaml_python):
 
 def get_header():
     return """from django.db import models
-from nodesk_template.models import Template
+from nodesk_template.models.Template import Template
 
 class {classname}(models.Model):
 """
@@ -134,7 +135,9 @@ def sync_model(template_directory_path) :
     # template file/yaml, save the Template and write the model down
     for template_file in template_files:
         with open(template_file, "r") as yaml_file :
+            print template_file
             yaml_hash = hash_content(yaml.dump(yaml.load(yaml_file.read())))
+            print template_file
         
         try:
             model = Template.objects.get(yaml_hash__exact=yaml_hash)
@@ -155,3 +158,5 @@ def sync_model(template_directory_path) :
         model.alive=True
         model.full_clean()
         model.save()
+    reload(nodesk_template.models)
+    call_command('syncdb', interactive=False)
