@@ -95,7 +95,7 @@ def save_field_value_in_dossier(field_value_list,dossier_object):
     for (field,value) in field_value_list :
         setattr(dossier_object,field,value)
 
-@csrf_exempt
+
 def get_dossier_list_post_new_dossier(request, template_id) :
     response = HttpResponse()
     if is_logged(request) :
@@ -152,7 +152,6 @@ def get_dossier_list_post_new_dossier(request, template_id) :
 
 
 
-@csrf_exempt
 def get_dossier_post_dossier(request, template_id, dossier_id) :
     response = HttpResponse()
     if is_logged(request) and is_authorized(template_id) :

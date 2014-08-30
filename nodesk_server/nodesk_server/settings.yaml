@@ -1,0 +1,24 @@
+'AUTH_LDAP_BIND_DN':
+  'default': 'cn=admin,dc=example,dc=com'
+  'set': 'cn=admin,dc=example,dc=com'
+'AUTH_LDAP_BIND_PASSWORD':
+  'default': 'admin'
+  'set': 'admin'
+'AUTH_LDAP_GROUP_SEARCH':
+  'default': 'ou=groups,dc=example,dc=com'
+  'set': 'ou=groups,dc=example,dc=com'
+'AUTH_LDAP_GROUP_SEARCH_FILTER':
+  'default': '(objectClass=groupOfNames)'
+  'set': '(objectClass=groupOfNames)'
+'AUTH_LDAP_GROUP_TYPE':
+  'default': 'cn'
+  'set': 'cn'
+'AUTH_LDAP_SERVER_URI':
+  'default': 'ldap://localhost'
+  'set': 'ldap://localhost'
+'AUTH_LDAP_USER_SEARCH':
+  'default': 'ou=people,dc=example,dc=com'
+  'set': 'ou=people,dc=example,dc=com'
+'AUTH_LDAP_USER_SEARCH_FILTER':
+  'default': '(uid=%(user)s)'
+  'set': '(uid=%(user)s)'

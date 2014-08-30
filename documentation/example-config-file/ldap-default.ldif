@@ -1,0 +1,41 @@
+# Create top-level object in domain
+dn: dc=example,dc=com
+objectClass: top
+objectClass: dcObject
+objectclass: organization
+o: Nodesk Example Organization
+dc: example
+description: Nodesk LDAP Example 
+
+
+dn: ou=peoples,dc=example,dc=com
+objectClass: organizationalUnit
+ou: peoples
+
+dn: ou=groups,dc=example,dc=com
+objectClass: organizationalUnit
+ou: groups
+
+
+dn: cn=nodesk,ou=groups,dc=example,dc=com
+objectClass: posixGroup
+cn: nodesk
+gidNumber: 50000
+
+
+dn: uid=test,ou=peoples,dc=example,dc=com
+objectClass: top
+objectClass: posixAccount
+objectClass: inetOrgPerson
+cn: test test
+uid: test
+uidNumber: 5000
+gidNumber: 50000
+homeDirectory: /home/test
+sn: test
+givenName: test
+displayName: Test Test
+userPassword: test
+loginShell: /bin/bash
+mail: test@example.com
+

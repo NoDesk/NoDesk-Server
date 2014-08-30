@@ -1,0 +1,18 @@
+
+-   type : TextLine
+    name : Name
+    value : "Koiwai"
+
+-   type : TextLine
+    name : Surname
+    value : "Yotsuba"
+
+-   type : TextArea
+    name : Description
+    value : "A funny little girl with green hair"
+
+
+-   type : Coordinates
+    name : "Coordinates"
+    value : "35.6823815, 139.7530053"
+

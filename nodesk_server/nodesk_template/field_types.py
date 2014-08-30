@@ -4,7 +4,7 @@ from .exceptions import SectionFieldInSectionField
 
 def simple_field(field):
     def func(name, value):
-        return INDENTATION + "%s = models.%s(default='%s')\n" % (
+        return INDENTATION + "%s = models.%s(blank=True, null=True,default='%s')\n" % (
             name,
             field,
             value)
@@ -12,10 +12,9 @@ def simple_field(field):
 
 def media_field(field):
     def func(name, value):
-        return INDENTATION + "%s = models.%s(upload_to=Template.upload_to_func({classname}))\n" % (
+        return INDENTATION + "%s = models.%s(blank=True, null=True, upload_to=Template.upload_to_func('{classname}'))\n" % (
             name,
-            field,
-            value)
+            field)
     return func
 
 def radiobox_field():
