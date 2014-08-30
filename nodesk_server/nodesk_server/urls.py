@@ -8,8 +8,8 @@ urlpatterns = patterns('',
     # url(r'^$', 'nodesk_server.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+    url(r'^admin/nodesk/', include('nodesk_admin.urls')),
     url(r'^admin/', include(admin.site.urls)),
-
     
     url(r'^template/', include('nodesk_template.urls_template')),
     url(r'^dossier/', include('nodesk_template.urls_dossier')),

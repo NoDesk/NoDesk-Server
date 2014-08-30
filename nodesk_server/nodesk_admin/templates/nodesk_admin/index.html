@@ -1,0 +1,82 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block breadcrumbs %}{% endblock %}
+{% block nav-global %}{% endblock %}
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+{% endblock %}
+
+{% load i18n %}
+
+{% block title %}{{ title }} | {% trans 'NoDesk configuration site' %}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'NoDesk configuration' %}</h1>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+
+<div class="module aligned">
+    <h2>Server Administration</h2>
+    <form action="/admin/nodesk/reload_server/" method="post" class="">
+    {% csrf_token %}
+    
+    <div class="submit-row" style="background:none;border:none;">
+        <input class="default" type="submit" name="reload_server" value="Reload server" style="float:none; display:block; width:150px; margin-left: auto; margin-right: auto">
+    </div>
+    </form>
+</div>
+
+<form id="ldap_save" action="/admin/nodesk/ldap_config_save/" method="post">
+    {% csrf_token %}
+<fieldset class="module aligned {{ ldap_form.classes }}">
+    {% if ldap_form.name %}<h2>{{ ldap_form.name }}</h2>{% endif %}
+    {% if ldap_form.description %}
+        <div class="description">{{ ldap_form.description|safe }}</div>
+    {% endif %}
+    {% for field in ldap_form %}
+        <div class="form-row{% if field.field.name %} field-{{ field.field.name }}{% endif %}">
+            {% if ldap_form.fields|length_is:'1' %}{{ ldap_form.errors }}{% endif %}
+                <label class="required" for="{{ field.name }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.field.help_text %}
+                    <p class="help">{{ field.field.help_text|safe }}</p>
+                {% endif %}
+        </div>
+    {% endfor %}
+</fieldset>
+<div class="submit-row">
+    <input class="" type="submit" name="default_save" value="Save with default values and reload server">
+    <input class="default" type="submit" name="custom_save" value="Save and reload server">
+</div>
+</form>
+
+
+
+<form id="template_save" action="/admin/nodesk/template_save/" method="post">
+    {% csrf_token %}
+<fieldset class="module aligned {{ template_form.classes }}">
+    {% if template_form.name %}<h2>{{ template_form.name }}</h2>{% endif %}
+    {% if template_form.description %}
+        <div class="description">{{ template_form.description|safe }}</div>
+        {% endif %}
+    <p class="form-row" style="color:#333 !important; font-weight:bold !important; margin: 6px 0px; padding-left:10px; font-size:15px">Create the YAML of a template with the <a href="/admin/nodesk/template_creator/">Template Creator</a></p>
+    {% for field in template_form %}
+        <div class="form-row{% if field.field.name %} field-{{ field.field.name }}{% endif %}">
+            {% if template_form.fields|length_is:'1' %}{{ template_form.errors }}{% endif %}
+                <label class="required" for="{{ field.name }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.field.help_text %}
+                    <p class="help">{{ field.field.help_text|safe }}</p>
+                {% endif %}
+        </div>
+    {% endfor %}
+</fieldset>
+<div class="submit-row">
+    <input class="default" type="submit" name="template_save" value="Create template and reload server">
+</div>
+</form>
+</div>
+{% endblock %}

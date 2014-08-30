@@ -1,0 +1,270 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block breadcrumbs %}{% endblock %}
+{% block nav-global %}{% endblock %}
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "/static/nodesk_admin/nodesk_admin.css" %}" />
+{% endblock %}
+{% load i18n %}
+
+
+{% block extrahead %}
+{{ block.super }}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+var cols;
+$(document).ready(function () {
+    // Code adapted from http://djangosnippets.org/snippets/1389/
+    function clearElementValue(el) {
+        if (el.tagName === "UL")
+        {
+            //If it's a UL element, we need to go deeper to set the checkbox
+            $(el).children().children().children().each(function () {
+                $(this).attr('checked', false);
+            });
+        }
+        else if(el.tagName === "SELECT")
+        {
+            //if it's a select element, you need to select a default <option>
+            el[0].selectedIndex = 0;
+        }
+        else $(el).val("")
+    }
+    function updateElementIndex(el, prefix, ndx) {
+        var id_regex = new RegExp('(' + prefix + '-\\d+-)');
+        var replacement = prefix + '-' + ndx + '-';
+        if (el.tagName === "UL")
+        {
+            $(el).children().children().each(function () {
+                updateElementIndex(this , prefix, ndx);
+            })
+            $(el).children().children().children().each(function () {
+                updateElementIndex(this , prefix, ndx);
+            })
+        }
+        if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex,
+        replacement));
+        if (el.id) el.id = el.id.replace(id_regex, replacement);
+        if (el.name) el.name = el.name.replace(id_regex, replacement);
+    }
+
+    function deleteForm(btn, prefix) {
+        var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+        if (formCount > 1) {
+            // Delete the item/form
+            $(btn).parents('.item').remove();
+            var forms = $('.item'); // Get all the forms  
+            // Update the total number of forms (1 less than before)
+            $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+            var i = 0;
+            // Go through the forms and set their indices, names and IDs
+            for (formCount = forms.length; i < formCount; i++) {
+                $(forms.get(i)).children().children().each(function () {
+                    updateElementIndex(this, prefix, i);
+                });
+            }
+        } // End if
+        else {
+            alert("You have to enter at least one field for the template !");
+        }
+        return false;
+    }
+
+    function addForm(btn, prefix) {
+        var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+        var maxFormCount = parseInt($('#id_' + prefix + '-MAX_NUM_FORMS').val());
+        
+        if (formCount < maxFormCount) {
+            // Clone a form (without event handlers) from the first form
+            var row = $(".item:first").clone(false).get(0);
+            // Insert it after the last form
+            $(row).removeAttr('id').hide().insertAfter(".item:last").slideDown(300);
+
+            // Remove the bits we don't want in the new row/form
+            // e.g. error messages
+            $(".errorlist", row).remove();
+            $(row).children().removeClass("error");
+
+            // Relabel or rename all the relevant bits
+            $(row).children().children().each(function () {
+                updateElementIndex(this, prefix, formCount);
+                clearElementValue(this);
+            });
+
+            // Add an event handler for the delete item/form link 
+            $(row).find(".delete").click(function () {
+                return deleteForm(this, prefix);
+            });
+
+            $(function () {
+            cols = document.querySelectorAll('[draggable=true]');
+            [].forEach.call(cols, function (col) {
+            col.addEventListener('dragstart', handleDragStart, false);
+            col.addEventListener('dragenter', handleDragEnter, false);
+            col.addEventListener('dragover', handleDragOver, false);
+            col.addEventListener('dragleave', handleDragLeave, false);
+            col.addEventListener('drop', handleDrop, false);
+            col.addEventListener('dragend', handleDragEnd, false);
+                });
+            });
+
+            // Update the total form count
+            $("#id_" + prefix + "-TOTAL_FORMS").val(formCount + 1);
+        } // End if
+        else
+        {
+            alert("Sorry, you can only enter a maximum of " + maxFormCount + " fields.");
+        }
+        return false;
+    }
+    // Register the click event handlers
+    $("#add").click(function () {
+        return addForm(this, "form");
+    });
+
+    $(".delete").click(function () {
+        return deleteForm(this, "form");
+    });
+
+
+    function handleDragStart(e) {
+    this.style.opacity = '0.5';
+    $(this).find("input").each(function() {
+        if ((this.type.toLowerCase() === "checkbox") && ($(this).is(':checked')))
+        {
+            $(this).attr("checked","checked");
+        }
+        else
+        {
+            $(this).attr("value",$(this).val());
+        }
+    })
+    $(this).find("select").each(function() {
+        $(this).children("option").filter(":selected").each(function() {
+            $(this).attr("selected",true);
+        });
+    })
+    dragSrcEl = this;
+    e.dataTransfer.effectAllowed = 'move';
+    dropedElementSortingOrder = $(this).find(".SortingOrderHidden");
+    e.dataTransfer.setData('text/html', this.innerHTML);
+}
+
+function handleDragOver(e) {
+    if (e.preventDefault) {
+        e.preventDefault();
+    }
+    return false;
+}
+
+function handleDragEnter(e) {
+    this.classList.add('over');
+}
+
+function handleDragLeave(e) {
+    this.classList.remove('over');
+}
+
+function handleDrop(e) {
+    if (e.stopPropagation) {
+        e.stopPropagation();
+    }
+    if (dragSrcEl != this) {
+        $(this).find("input").each(function() {
+            if ((this.type.toLowerCase() === "checkbox") && ($(this).is(':checked')))
+            {
+                $(this).attr("checked","checked");
+            }
+            else
+            {
+                $(this).attr("value",$(this).val());
+            }
+        })
+        $(this).find("select").each(function() {
+            $(this).children("option").filter(":selected").each(function() {
+                $(this).attr("selected",true);
+            });
+        })
+        dragSrcEl.innerHTML = this.innerHTML;
+        this.innerHTML = e.dataTransfer.getData('text/html');
+        var draggedElementSortingOrder = $(this).find(".SortingOrderHidden");
+        var dropedElementSortingOrder = $(dragSrcEl).find(".SortingOrderHidden");
+        var a = dropedElementSortingOrder.val();
+        var b = draggedElementSortingOrder.val();
+        dropedElementSortingOrder.val(b);
+        draggedElementSortingOrder.val(a);
+    }
+    return false;
+}
+
+function handleDragEnd(e) {
+    [].forEach.call(cols, function (col) {
+        col.classList.remove('over');
+    });
+    this.style.opacity = '1.0';
+    $(".delete").click(function () {
+            return deleteForm(this, "form");
+        });
+
+    //after the drop, we give the right number to all the forms
+    var formCount = parseInt($('#id_form-TOTAL_FORMS').val());
+    var forms = $('.item'); // Get all the forms  
+    // Go through the forms and set their indices, names and IDs
+    for (i = 0; i < formCount; i++) {
+        $(forms.get(i)).children().children().each(function () {
+            updateElementIndex(this, "form", i);
+        });
+    }
+}
+});
+</script>
+{% endblock %}
+
+
+{% block title %}{{ title }} | {% trans 'NoDesk template creator' %}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'NoDesk template creator' %}</h1>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+
+<form target="" method="post">
+    {% csrf_token %}
+    <fieldset class="module aligned {{ field_form.classes }}">
+        <h2>{% trans 'NoDesk template name' %}</h2>
+        <div class="form-row">
+            <label for="template_name">Template name</label>
+            <input class="vLargeTextField" type="text" required="true" name="template_name" maxlength="256">
+        </div>
+    </fieldset>
+    {{ field_formset.management_form }}
+    <div  id="Dropzone">
+    {% for form in field_formset.forms %}
+         <fieldset draggable="true" class="ProcedureDrag item module aligned {{ field_form.classes }}">
+            <h2>{% trans 'NoDesk template field' %}</h2>
+            {% for field in form %}
+                <div class="form-row{% if field.name %} field-{{ field.name }}{% endif %}">
+                    <label for="id_{{form.prefix}}-{{ field.name }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <p class="help">{{ field.help_text|safe }}</p>
+                        {% endif %}
+                </div>
+                {% endfor %}
+                <input class="SortingOrderHidden" type="hidden" value="1">
+            <p style=""><a class="delete" href="#">Delete</a></p>
+        </fieldset>
+    {% endfor %}
+    </div>
+
+<p><a id="add" href="#">Add another field</a></p>
+<div class="submit-row">
+    <input class="default" type="submit" name="create" value="Generate YAML">
+</div>
+</form>
+</div>
+{% endblock %}
