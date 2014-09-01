@@ -7,14 +7,13 @@ Depending on <TEMPLATE_API>, you can access the different part of the API (descr
 ###GET request
 You will get the list of the templates stored by NoDesk-Server.
 You can add to the GET request 2 parameters :
- * alive : 
+ * visible : 
     - If "true", the list served will only contained the template that are
-    considered alive (the one in the template directory : nodesk-app can only create
-    new dossier for alive template).
+    considered visible (NoDesk app can only create new dossier for visible template)
     - If "false", the list served will only contained the template that are
-    considered dead (the contrary of alive).
+    considered dead invisible (contrary of visible).
     - If not added to the GET request, the list served by the server will contains
-    all the template (both alive and dead). 
+    all the template (both visible and invisible).
  * json :
     - If "true", the list served by the server will also contain the json equivalent
     to the YAML of the template.

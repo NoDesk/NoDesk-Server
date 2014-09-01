@@ -105,10 +105,10 @@ def sync_model(template_directory_path) :
     # and if its content wasn't tampered with (we check the hash) :
     # if one of those two is true, then we re-write the model file content,
     # with the content saved in the Template
-    # We also set 'alive' for all Template to false : if they are alive, they
+    # We also set 'visible' for all Template to false : if they are visible, they
     # will be set to true after that
     """
-    for model in Template.objects.all().update(alive=False) :
+    for model in Template.objects.all().update(visible=False) :
         model_path = '{0}/{1}_{2}.py'.format(
                 nodesk_template.models.__path__[0],
                 model.name.replace(" ","_"),
@@ -155,7 +155,7 @@ def sync_model(template_directory_path) :
                     model.yaml_hash)
             with open(model_path, "w") as model_file:
                 model_file.write(model.model)
-        model.alive=True
+        model.visible=True
         model.full_clean()
         model.save()
     reload(nodesk_template.models)

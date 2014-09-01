@@ -28,13 +28,13 @@ def ping(request) :
 def get_template_list(request) :
     response = HttpResponse()
     if is_logged(request) :
-        list_type = request.GET.get('alive', None)
+        list_type = request.GET.get('visible', None)
         if list_type is None :
             template_query_set = Template.objects.all()
         elif list_type == 'true' :
-            template_query_set = Template.objects.filter(alive=True)
+            template_query_set = Template.objects.filter(visible=True)
         elif list_type == 'false' :
-            template_query_set = Template.objects.filter(alive=False)
+            template_query_set = Template.objects.filter(visible=False)
         
         json_content = []
         for template in template_query_set :
