@@ -2,6 +2,7 @@
 import yaml
 import json
 import os
+import uuid
 
 from django.core.management import call_command
 import nodesk_template
@@ -75,7 +76,7 @@ def get_meta_class():
         INDENTATION*2 + "app_label = '%s'\n" % APP_NAME
 
 
-def generate_template_model_from_YAML_file(file_path):
+def generate_template_model_from_YAML_file(file_path,name=None):
     yaml_file = open(file_path, "r")
     yaml_string = yaml.dump(yaml.load(yaml_file.read()))
     yaml_file.close()
@@ -86,31 +87,44 @@ def generate_template_model_from_YAML_file(file_path):
     
     yaml_python = yaml.load(yaml_string)
     model_content = generate_template_model_from_YAML(yaml_python)
-    model_content = model_content.format(classname=basename.replace(' ','_') + "_" + yaml_hash )
+    if name is None or name == "" :
+        name = basename
+        filename = name
+    else :
+        filename = name.replace(' ','_') + '_' + yaml_hash
     model_hash = hash_content(model_content)
+    model_content = model_content.format(classname=filename)
     
     model = Template(
             yaml_hash=yaml_hash,
             model_hash=model_hash,
-            name=basename,
+            name=name,
+            model_filename=filename,
             yaml=yaml.dump(yaml_python),
             json=json.dumps(yaml_python),
             model=model_content)
     return model
 
 
-def generate_template_model_from_YAML_with_name(yaml_string,name):
+def generate_template_model_from_YAML_with_name(yaml_string,name=None):
     yaml_hash = hash_content(yaml_string)
     
     yaml_python = yaml.load(yaml_string)
     model_content = generate_template_model_from_YAML(yaml_python)
-    model_content = model_content.format(classname=name.replace(' ','_') + "_" + yaml_hash )
+        
     model_hash = hash_content(model_content)
+    if name is None or name == "" :
+        name = model_hash
+        filename = name
+    else :
+        filename = name.replace(' ','_') + '_' + yaml_hash
+    model_content = model_content.format(classname=filename)
     
     model = Template(
             yaml_hash=yaml_hash,
             model_hash=model_hash,
             name=name,
+            model_filename=filename,
             yaml=yaml.dump(yaml_python),
             json=json.dumps(yaml_python),
             model=model_content)
@@ -123,10 +137,9 @@ def sync_model() :
     # if one of those two is true, then we re-write the model file content,
     # with the content saved in the Template
     for model in Template.objects.all() :
-        model_path = '{0}/{1}_{2}.py'.format(
+        model_path = '{0}/{1}.py'.format(
                 nodesk_template.models.__path__[0],
-                model.name.replace(" ","_"),
-                model.yaml_hash )
+                model.model_filename)
         if os.path.isfile(model_path) is False :
             with open(model_path, "w+") as model_file:
                 model_hash = hash_content(model_file.read())
