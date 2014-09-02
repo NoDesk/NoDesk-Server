@@ -66,7 +66,7 @@ class {classname}(models.Model):
 def get_static_fields():
     list_field = []
     list_field.append(INDENTATION + "dossier_name = models.TextField()")
-    list_field.append(INDENTATION + "dossier_date = models.DateField()")
+    list_field.append(INDENTATION + "dossier_date = models.DateField(auto_now=True)")
     return '\n'.join(list_field) + '\n'
 
 
