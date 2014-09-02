@@ -5,26 +5,27 @@
 {% block extrastyle %}
     {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "nodesk_admin/nodesk_admin.css" %}" />
 {% endblock %}
 
 {% load i18n %}
 
-{% block title %}{{ title }} | {% trans 'NoDesk configuration site' %}{% endblock %}
+{% block title %}{{ title }} | {% trans 'nodesk configuration site' %}{% endblock %}
 
 {% block branding %}
-<h1 id="site-name">{% trans 'NoDesk configuration' %}</h1>
+<h1 id="site-name">{% trans 'nodesk configuration' %}</h1>
 {% endblock %}
 
 {% block content %}
 <div id="content-main">
 
 <div class="module aligned">
-    <h2>Server Administration</h2>
+    <h2>server administration</h2>
     <form action="/admin/nodesk/reload_server/" method="post" class="">
     {% csrf_token %}
     
     <div class="submit-row" style="background:none;border:none;">
-        <input class="default" type="submit" name="reload_server" value="Reload server" style="float:none; display:block; width:150px; margin-left: auto; margin-right: auto">
+        <input class="default" type="submit" name="reload_server" value="reload server" style="float:none; display:block; width:150px; margin-left: auto; margin-right: auto">
     </div>
     </form>
 </div>
@@ -48,8 +49,49 @@
     {% endfor %}
 </fieldset>
 <div class="submit-row">
-    <input class="" type="submit" name="default_save" value="Save with default values and reload server">
-    <input class="default" type="submit" name="custom_save" value="Save and reload server">
+    <input class="" type="submit" name="default_save" value="save with default values and reload server">
+    <input class="default" type="submit" name="custom_save" value="save and reload server">
+</div>
+</form>
+
+
+<form id="template_config_save" action="/admin/nodesk/template_config_save/" method="post">
+    {% csrf_token %}
+
+<fieldset class="module aligned {{ template_config_formset.classes }}">
+    <h2>Templates configuration</h2>
+    {% if template_config_formset.description %}
+        <div class="description">{{ template_config_formset.description|safe }}</div>
+    {% endif %}
+    {{ template_config_formset.management_form }}
+<table id="formset" class="form">
+{% for form in template_config_formset.forms %}
+    {% if forloop.first %}
+    <thead><tr>
+        {% for field in form.visible_fields %}
+            <th>{{ field.label|capfirst }}</th>
+        {% endfor %}
+    </tr></thead>
+    {% endif %}
+    <tr class="form-row">
+    {% for field in form.visible_fields %}
+        <td>
+        {# Include the hidden fields in the form #}
+        {% if forloop.first %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+        {% endif %}
+        {{ field.errors.as_ul }}
+        {{ field }}
+    </td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+</table>
+</fieldset>
+<div class="submit-row">
+    <input class="default" type="submit" name="save" value="save and reload server">
 </div>
 </form>
 
@@ -62,7 +104,7 @@
     {% if template_form.description %}
         <div class="description">{{ template_form.description|safe }}</div>
         {% endif %}
-    <p class="form-row" style="color:#333 !important; font-weight:bold !important; margin: 6px 0px; padding-left:10px; font-size:15px">Create the YAML of a template with the <a href="/admin/nodesk/template_creator/">Template Creator</a></p>
+    <p class="form-row" style="color:#333 !important; font-weight:bold !important; margin: 6px 0px; padding-left:10px; font-size:15px">create the yaml of a template with the <a href="/admin/nodesk/template_creator/">template creator</a></p>
     {% for field in template_form %}
         <div class="form-row{% if field.field.name %} field-{{ field.field.name }}{% endif %}">
             {% if template_form.fields|length_is:'1' %}{{ template_form.errors }}{% endif %}
@@ -75,7 +117,7 @@
     {% endfor %}
 </fieldset>
 <div class="submit-row">
-    <input class="default" type="submit" name="template_save" value="Create template and reload server">
+    <input class="default" type="submit" name="template_save" value="create template and reload server">
 </div>
 </form>
 </div>

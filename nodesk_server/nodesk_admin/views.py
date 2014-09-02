@@ -6,9 +6,11 @@ from django.forms.formsets import formset_factory
 from nodesk_admin import forms
 from nodesk_server import settings
 import nodesk_template
-from nodesk_template import model_manager
+from nodesk_template import model_manager, models
 import time, os, re, yaml
 
+TemplateFieldFormSet = formset_factory(forms.TemplateFieldForm)
+TemplateConfigFormSet = formset_factory(forms.TemplateConfigForm,extra=0)
 
 def touch(fname, times=None):
     with open(fname, 'a'):
@@ -23,20 +25,30 @@ def reload_uwsgi() :
 def admin_console(request) :
     ldap_form = forms.ConfigLDAPForm()
     template_form = forms.TemplateSaveForm()
+    initial_data = models.Template.objects.order_by('visible','name','id').values('id','name','visible')
+    template_config_formset = TemplateConfigFormSet(initial=initial_data)
     if 'template_name' in request.session and 'template_content' in request.session :
         template_form = forms.TemplateSaveForm(
-                initial=
-                {
-                    'template_name': request.session['template_name'],
-                    'template_content': request.session['template_content'],
-                })
+             initial=
+             {
+                 'template_name': request.session['template_name'],
+                 'template_content': request.session['template_content'],
+             })
         del request.session['template_name']
         del request.session['template_content']
 
     return render(request,'nodesk_admin/index.html',
-            {
-                'ldap_form' : ldap_form,
-                'template_form' : template_form})
+           {
+               'ldap_form' : ldap_form,
+               'template_form' : template_form,
+               'template_config_formset' : template_config_formset})
+
+
+@staff_member_required
+@require_POST
+def template_config_save(request):
+    pass
+
 
 @staff_member_required
 @require_POST
@@ -76,14 +88,15 @@ def template_save(request):
         if 'template_save' in request.POST :
             form = forms.TemplateSaveForm(request.POST)
             if form.is_valid() :
-                dirpath = nodesk_template.__path__[0] + '/template_yaml'
-                filepath = dirpath +'/' + form.cleaned_data['template_name'] + '.yaml'
-                with open(filepath,'w') as file_ :
-                    file_.write(form.cleaned_data['template_content'])
-                model_manager.sync_model(dirpath)
+
+                template_object = model_manager.generate_template_model_from_YAML_with_name(
+                        form.cleaned_data['template_content'],
+                        form.cleaned_data['template_name'])
+                template_object.full_clean()
+                template_object.save()
+                model_manager.sync_model()
                 reload_uwsgi()
     except :
-        #os.remove(filepath)
         msg['content'] = "An error occured during the save of the template. Maybe an error in the YAML?"
         msg['error'] = True
         raise
@@ -94,7 +107,6 @@ def template_save(request):
 
 @staff_member_required
 def template_creator(request):
-    TemplateFieldFormSet = formset_factory(forms.TemplateFieldForm)
     if request.method == 'POST' :
         formset = TemplateFieldFormSet(request.POST,request.FILES)
         if formset.is_valid() :

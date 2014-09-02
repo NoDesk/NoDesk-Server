@@ -7,6 +7,9 @@ urlpatterns = [
            r'^$',
            views.admin_console),
         url(
+           r'template_config_save/?^$',
+           views.template_config_save),
+        url(
            r'^reload_server/?$',
            views.reload_server),
         url(

@@ -2,6 +2,20 @@ from django import forms
 from nodesk_server import settings
 import yaml
 
+
+class TemplateConfigForm(forms.Form):
+    id = forms.CharField(widget=forms.HiddenInput(attrs={'class':'', 'required':'true'}))
+    name = forms.CharField(
+            label='Template name',
+            max_length=256,
+            widget=forms.TextInput(attrs={'class':'vLargeTextField', 'required':'true'})
+            )
+    visible = forms.BooleanField(
+            label='Visible',
+            required=False,
+            widget=forms.CheckboxInput(attrs={'class':''})
+            )
+
 class TemplateFieldForm(forms.Form):
     field_name = forms.CharField(
             label='Field name',

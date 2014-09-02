@@ -1,4 +1,18 @@
 /*
+ * index.html css
+ */
+tr th {
+    padding-left: 12px;
+
+}
+tr.form-row td {
+    text-align: center;
+    vertical-align: middle;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+/*
  * redirect.html css
  */
 
