@@ -9,10 +9,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 import json
 import time
-import mimetypes
-import traceback
 
 from nodesk_template.models import *
+from nodesk_server import settings
 
 #check if the user requesting the template or one of its attachement
 #is authorized to access it.
@@ -66,6 +65,7 @@ def get_template(request, template_id) :
             response.write(template.json)
         except ObjectDoesNotExist :
             reponse = HttpResponseNotFound()
+            if settings.DEBUG is True : raise
     else :
         response = HttpResponse(status = 401)
     
@@ -145,6 +145,7 @@ def get_dossier_list_post_new_dossier(request, template_id) :
                 raise Exception()
         except :
             response = HttpResponseNotFound()
+            if settings.DEBUG is True : raise
     else :
         response = HttpResponse(status = 401)
     
@@ -185,8 +186,9 @@ def get_dossier_post_dossier(request, template_id, dossier_id) :
                         raise Exception()
             else :
                 raise Exception()
-        except Exception as e:
+        except:
             response = HttpResponseNotFound()
+            if settings.DEBUG is True : raise
     else :
         response = HttpResponse(status = 401)
     return response
@@ -222,8 +224,9 @@ def get_field_value_post_field_value(request, template_id, dossier_id, field_nam
                     raise Exception()
             else :
                 raise Exception()                
-        except Exception as e :
+        except :
             response = HttpResponseNotFound()
+            if settings.DEBUG is True : raise
     else :
         response = HttpResponse(status = 401)
     return response
