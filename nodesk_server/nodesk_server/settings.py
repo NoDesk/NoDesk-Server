@@ -95,7 +95,7 @@ MEDIA_ROOT = 'media'
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SESSION_COOKIE_HTTPONLY = False
 
-
+CSRF_COOKIE_SECURE = True
 
 # Keep ModelBackend around for per-user permissions and maybe a local
 # superuser.
