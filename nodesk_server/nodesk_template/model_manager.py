@@ -99,64 +99,40 @@ def generate_template_model_from_YAML_file(file_path):
     return model
 
 
+def generate_template_model_from_YAML_with_name(yaml_string,name):
+    yaml_hash = hash_content(yaml_string)
+    
+    yaml_python = yaml.load(yaml_string)
+    model_content = generate_template_model_from_YAML(yaml_python)
+    model_content = model_content.format(classname=name.replace(' ','_') + "_" + yaml_hash )
+    model_hash = hash_content(model_content)
+    
+    model = Template(
+            yaml_hash=yaml_hash,
+            model_hash=model_hash,
+            name=name,
+            yaml=yaml.dump(yaml_python),
+            json=json.dumps(yaml_python),
+            model=model_content)
+    return model
 
-def sync_model(template_directory_path) :
+
+def sync_model() :
     # For every Template in the db, we check that the model file is still there,
     # and if its content wasn't tampered with (we check the hash) :
     # if one of those two is true, then we re-write the model file content,
     # with the content saved in the Template
-    # We also set 'visible' for all Template to false : if they are visible, they
-    # will be set to true after that
-    """
-    for model in Template.objects.all().update(visible=False) :
+    for model in Template.objects.all() :
         model_path = '{0}/{1}_{2}.py'.format(
                 nodesk_template.models.__path__[0],
                 model.name.replace(" ","_"),
                 model.yaml_hash )
         if os.path.isfile(model_path) is False :
-            with open(file_path, "w+") as model_file:
+            with open(model_path, "w+") as model_file:
                 model_hash = hash_content(model_file.read())
                 if model.model_hash != model_hash:
                     model_file.seek(0)
                     model_file.write(model.model)
                     model_file.truncate()
-    """
-
-
-    # List the template files inside the template directory.
-    # The list need to contain the path of the template files, not just their
-    # filenames (that's why there's a call to map)
-    file_list = os.listdir(template_directory_path)
-    file_list = map(lambda x : template_directory_path + '/' + x , file_list)
-    template_files = [ f for f in file_list if os.path.isfile(f) ]
-
-    # For every template files, we check if a Template already exists for it.
-    # if not, then we create the model and the Template corresponding to the
-    # template file/yaml, save the Template and write the model down
-    for template_file in template_files:
-        with open(template_file, "r") as yaml_file :
-            print template_file
-            yaml_hash = hash_content(yaml.dump(yaml.load(yaml_file.read())))
-            print template_file
-        
-        try:
-            model = Template.objects.get(yaml_hash__exact=yaml_hash)
-        except :
-            model = None
-
-        # if the model was not found in the db, that mean the yaml was never
-        # parsed to generate de its model, so we generate the model
-        if model is None:
-            model = generate_template_model_from_YAML_file(template_file)
-
-            model_path = '{0}/{1}_{2}.py'.format(
-                    nodesk_template.models.__path__[0],
-                    model.name.replace(" ","_"),
-                    model.yaml_hash)
-            with open(model_path, "w") as model_file:
-                model_file.write(model.model)
-        model.visible=True
-        model.full_clean()
-        model.save()
     reload(nodesk_template.models)
     call_command('syncdb', interactive=False)

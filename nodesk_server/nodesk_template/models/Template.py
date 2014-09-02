@@ -11,8 +11,8 @@ class Template(models.Model):
     yaml = models.TextField()
     json = models.TextField()
     model = models.TextField()
-    alive = models.BooleanField(
-            default=False)
+    visible = models.BooleanField(
+            default=True)
     
     @staticmethod
     def upload_to_func(template_hash):
