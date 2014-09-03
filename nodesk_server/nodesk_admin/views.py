@@ -47,7 +47,31 @@ def admin_console(request) :
 @staff_member_required
 @require_POST
 def template_config_save(request):
-    pass
+    msg = {'redirect_url':'/admin/nodesk/', 'error':True}
+    try :
+        if 'save' in request.POST :
+            formset = TemplateConfigFormSet(request.POST,request.FILES)
+            if formset.is_valid() :
+                templates = {x.pk : x for x in models.Template.objects.all()}
+                for form in formset :
+                    id = int(form.cleaned_data['id'])
+                    name = form.cleaned_data['name']
+                    visible = form.cleaned_data['visible']
+                    template = templates.get(id,None)
+                    if template is not None :
+                        if (template.name != name) or (template.visible != visible) :
+                            template.visible = visible
+                            template.name = name
+                            template.full_clean()
+                            template.save()
+    except :
+        msg['content'] = "An error occured during the save of the templates' configuration."
+        if settings.DEBUG : raise
+    else :
+        msg['content'] = 'Configurations for the templates correctly saved.'
+        msg['success'] = True
+        del msg['error']
+    return render(request,'nodesk_admin/redirect.html', msg)
 
 
 @staff_member_required
@@ -76,14 +100,14 @@ def ldap_config_save(request) :
     return render(request,'nodesk_admin/redirect.html',
             {
                 'redirect_url':'/admin/nodesk/',
-                'content':'LDAP configuration saved. The server is reloading',
+                'content':'LDAP configuration saved. The server is now reloading.',
                 'success':True})
 
 @staff_member_required
 @require_POST
 def template_save(request):
     filepath = ""
-    msg = {'redirect_url':'/admin/nodesk/'}
+    msg = {'redirect_url':'/admin/nodesk/', 'error':True}
     try :
         if 'template_save' in request.POST :
             form = forms.TemplateSaveForm(request.POST)
@@ -98,11 +122,11 @@ def template_save(request):
                 reload_uwsgi()
     except :
         msg['content'] = "An error occured during the save of the template. Maybe an error in the YAML?"
-        msg['error'] = True
-        raise
+        if settings.DEBUG : raise
     else :
-        msg['content'] = 'Template correctly saved. The server is reloading'
+        msg['content'] = 'Template correctly saved. The server is now reloading.'
         msg['success'] = True
+        del msg['error']
     return render(request,'nodesk_admin/redirect.html', msg)
 
 @staff_member_required

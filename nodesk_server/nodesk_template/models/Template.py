@@ -7,7 +7,9 @@ class Template(models.Model):
     model_hash = models.CharField(
             max_length=64)
     name = models.CharField(
-            max_length=100)
+            max_length=256)
+    model_filename = models.CharField(
+            max_length=256)
     yaml = models.TextField()
     json = models.TextField()
     model = models.TextField()
