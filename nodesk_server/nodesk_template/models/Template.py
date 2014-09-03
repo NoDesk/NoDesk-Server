@@ -8,7 +8,7 @@ class Template(models.Model):
             max_length=64)
     name = models.CharField(
             max_length=256)
-    model_filename = models.CharField(
+    model_name = models.CharField(
             max_length=256)
     yaml = models.TextField()
     json = models.TextField()

@@ -89,17 +89,17 @@ def generate_template_model_from_YAML_file(file_path,name=None):
     model_content = generate_template_model_from_YAML(yaml_python)
     if name is None or name == "" :
         name = basename
-        filename = name
+        model_name = name
     else :
-        filename = name.replace(' ','_') + '_' + yaml_hash
+        model_name = name.replace(' ','_') + '_' + yaml_hash
     model_hash = hash_content(model_content)
-    model_content = model_content.format(classname=filename)
+    model_content = model_content.format(classname=model_name)
     
     model = Template(
             yaml_hash=yaml_hash,
             model_hash=model_hash,
             name=name,
-            model_filename=filename,
+            model_name=model_name,
             yaml=yaml.dump(yaml_python),
             json=json.dumps(yaml_python),
             model=model_content)
@@ -115,16 +115,16 @@ def generate_template_model_from_YAML_with_name(yaml_string,name=None):
     model_hash = hash_content(model_content)
     if name is None or name == "" :
         name = model_hash
-        filename = name
+        model_name = name
     else :
-        filename = name.replace(' ','_') + '_' + yaml_hash
-    model_content = model_content.format(classname=filename)
+        model_name = name.replace(' ','_') + '_' + yaml_hash
+    model_content = model_content.format(classname=model_name)
     
     model = Template(
             yaml_hash=yaml_hash,
             model_hash=model_hash,
             name=name,
-            model_filename=filename,
+            model_name=model_name,
             yaml=yaml.dump(yaml_python),
             json=json.dumps(yaml_python),
             model=model_content)
@@ -139,7 +139,7 @@ def sync_model() :
     for model in Template.objects.all() :
         model_path = '{0}/{1}.py'.format(
                 nodesk_template.models.__path__[0],
-                model.model_filename)
+                model.model_name)
         if os.path.isfile(model_path) is False :
             with open(model_path, "w+") as model_file:
                 model_hash = hash_content(model_file.read())

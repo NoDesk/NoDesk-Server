@@ -78,8 +78,7 @@ def get_dossier_model_object(template_id) :
     if dossier_model_object_dict.get(template_id, None) is None :
         try :
             template = Template.objects.get(pk=template_id)
-            model_name = template.name + '_' + template.yaml_hash
-            exec('model = ' + model_name)
+            exec('model = ' + template.model_name)
         except (NameError, ObjectDoesNotExist) as e :
             model = None
         dossier_model_object_dict[template_id] = model
