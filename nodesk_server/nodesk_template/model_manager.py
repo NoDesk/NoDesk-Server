@@ -2,7 +2,8 @@
 import yaml
 import json
 import os
-import uuid
+import re
+import unicodedata
 
 from django.core.management import call_command
 import nodesk_template
@@ -15,8 +16,20 @@ from nodesk_template.field_types import field_types_dict
 
 APP_NAME = "nodesk_template"
 
+def remove_accents(input_str):
+    if isinstance(input_str,str) : input_str = unicode(input_str,'UTF-8')
+    nkfd_form = unicodedata.normalize('NFKD', input_str)
+    return u"".join([c for c in nkfd_form if not unicodedata.combining(c)])
+
+def normalize_string(string):
+    string = remove_accents(string)
+    string = re.sub('[^a-zA-Z0-9_]','_', string)
+    string = re.sub('^[^a-zA-Z]','_',string)
+    return string
+
+
 def generate_field_name(initial_name, fieldnames_count_dict) :
-    name = '_'.join(initial_name.split())
+    name = normalize_string(initial_name)
     fieldname_count = fieldnames_count_dict.get(name, 0)
     fieldnames_count_dict[name] = fieldname_count + 1
     return "{0}_{1}".format(name, fieldname_count)
@@ -92,6 +105,7 @@ def generate_template_model_from_YAML_file(file_path,name=None):
         model_name = name
     else :
         model_name = name.replace(' ','_') + '_' + yaml_hash
+    model_name = normalize_string(model_name)
     model_hash = hash_content(model_content)
     model_content = model_content.format(classname=model_name)
     
@@ -118,6 +132,7 @@ def generate_template_model_from_YAML_with_name(yaml_string,name=None):
         model_name = name
     else :
         model_name = name.replace(' ','_') + '_' + yaml_hash
+    model_name = normalize_string(model_name)
     model_content = model_content.format(classname=model_name)
     
     model = Template(
