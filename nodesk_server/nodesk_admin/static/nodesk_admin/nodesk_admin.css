@@ -12,6 +12,11 @@ tr.form-row td {
     padding-right: 25px;
 }
 
+tr.form-row td a {
+    font-weight: bold !important;
+    font-size : 12px;
+}
+
 /*
  * redirect.html css
  */

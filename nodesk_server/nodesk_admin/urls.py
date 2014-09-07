@@ -16,7 +16,7 @@ urlpatterns = [
            r'^ldap_config_save/?$',
            views.ldap_config_save),
         url(
-           r'^template_creator/?$',
+           r'^template_creator(/(?P<template_id>[0-9]+))?/?$',
            views.template_creator),
         url(
            r'^template_save/?$',

@@ -2,6 +2,7 @@ from django.shortcuts import render, render_to_response
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import *
 from django.http import *
+from django.core.exceptions import *
 from django.forms.formsets import formset_factory
 from nodesk_admin import forms
 from nodesk_server import settings
@@ -10,6 +11,7 @@ from nodesk_template import model_manager, models
 import time, os, re, yaml
 
 TemplateFieldFormSet = formset_factory(forms.TemplateFieldForm)
+TemplateFieldFormSet_noExtra = formset_factory(forms.TemplateFieldForm,extra=0)
 TemplateConfigFormSet = formset_factory(forms.TemplateConfigForm,extra=0)
 
 def touch(fname, times=None):
@@ -130,7 +132,7 @@ def template_save(request):
     return render(request,'nodesk_admin/redirect.html', msg)
 
 @staff_member_required
-def template_creator(request):
+def template_creator(request,template_id=None):
     if request.method == 'POST' :
         formset = TemplateFieldFormSet(request.POST,request.FILES)
         if formset.is_valid() :
@@ -147,10 +149,31 @@ def template_creator(request):
                 'redirect_url':'/admin/nodesk/template_creator/',
                 'content': "A required field was missing",
                 'error':True})
-        return HttpResponseRedirect("/admin/nodesk/#template_creator")
+        return HttpResponseRedirect("/admin/nodesk/#template_save")
     else :
+        if template_id is None :
+            formset = TemplateFieldFormSet()
+        else :
+            try :
+                template = models.Template.objects.get(pk=template_id)
+                fields = yaml.load(template.yaml)
+                data = []
+                for field in fields :
+                    field_data = {
+                            'field_name': field['name'],
+                            'field_type':field['type'],
+                            'field_value': field['value'] #TODO FIXME
+                            }
+                    #TODO FIXME
+                    if field.get('options',None) is not None :
+                        field_data['field_options'] = field['options']
+                    data.append(field_data)
+                print data
+                formset = TemplateFieldFormSet_noExtra(initial=data)
+            except ObjectDoesNotExist:
+                formset = TemplateFieldFormSet()
         return render(request,'nodesk_admin/template_creator.html',
-                {'field_formset':TemplateFieldFormSet()})
+                {'field_formset':formset})
 
 @staff_member_required
 def reload_server(request) :

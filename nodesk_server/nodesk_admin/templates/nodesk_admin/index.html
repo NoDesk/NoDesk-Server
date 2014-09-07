@@ -71,6 +71,7 @@
         {% for field in form.visible_fields %}
             <th>{{ field.label|capfirst }}</th>
         {% endfor %}
+        <th></th>
     </tr></thead>
     {% endif %}
     <tr class="form-row">
@@ -84,8 +85,9 @@
         {% endif %}
         {{ field.errors.as_ul }}
         {{ field }}
-    </td>
+        </td>
     {% endfor %}
+    <td><a href="/admin/nodesk/template_creator/{{ form.id.value }}/">Create a template based on this one.</a></td>
     </tr>
 {% endfor %}
 </table>
@@ -104,7 +106,7 @@
     {% if template_form.description %}
         <div class="description">{{ template_form.description|safe }}</div>
         {% endif %}
-    <p class="form-row" style="color:#333 !important; font-weight:bold !important; margin: 6px 0px; padding-left:10px; font-size:15px">create the yaml of a template with the <a href="/admin/nodesk/template_creator/">template creator</a></p>
+    <p class="form-row" style="color:#333 !important; font-weight:bold !important; margin: 6px 0px; padding-left:10px; font-size:15px">Create the yaml of a template with the <a href="/admin/nodesk/template_creator/">template creator</a></p>
     {% for field in template_form %}
         <div class="form-row{% if field.field.name %} field-{{ field.field.name }}{% endif %}">
             {% if template_form.fields|length_is:'1' %}{{ template_form.errors }}{% endif %}

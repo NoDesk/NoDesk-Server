@@ -1,0 +1,5 @@
+ - Template creator : add something else than a text input for the value field for checkbox/radiobox.
+ - Handle nginx/uWSGI serving media instead of django (detect if nginx serve)
+ - When receving data for new dossier/modify dossier : handle multipart/form-data not just for media.
+ - Add decorator for auth instead of if/else
+ - Add a delete button in the template list of nodesk admin : delete template and associate dossier?
