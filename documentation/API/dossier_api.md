@@ -1,6 +1,6 @@
 #Dossier HTTP API
 
-The dossier API is accessible at the URL : http://<NODESK_URL>/template/<DOSSIER_API>.
+The dossier API is accessible at the URL : http://\<NODESK_URL\>/dossier/\<DOSSIER_API\>.
 Depending on <DOSSIER_API>, you can access the different part of the API :
 
 ##'^$'
