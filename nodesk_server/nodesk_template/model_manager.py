@@ -80,7 +80,7 @@ def get_static_fields():
     list_field = []
     list_field.append(INDENTATION + "dossier_name = models.TextField()")
     list_field.append(INDENTATION + "dossier_date = models.DateField(auto_now=True)")
-    list_field.append(INDENTATION + "dossier_thumbnail = models.%s(blank=True, null=True, upload_to=Template.upload_to_func('{classname}'))")
+    list_field.append(INDENTATION + "dossier_thumbnail = models.FileField(blank=True, null=True, upload_to=Template.upload_to_func('{classname}'))")
     return '\n'.join(list_field) + '\n'
 
 
