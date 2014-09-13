@@ -4,10 +4,9 @@ from .exceptions import SectionFieldInSectionField
 
 def simple_field(field):
     def func(name, value):
-        return INDENTATION + "%s = models.%s(blank=True, null=True,default='%s')\n" % (
+        return INDENTATION + "%s = models.%s(blank=True, null=True)\n" % (
             name,
-            field,
-            value)
+            field)
     return func
 
 def media_field(field):
@@ -39,10 +38,10 @@ def checkbox_field():
         # FIXME: factor this
         # (with a inner function computing the string for a value)
         if isinstance(value, str):
-            fields += INDENTATION + name + '_' + value + ' = '
+            fields += INDENTATION + name + '_0' + ' = '
             fields += 'models.BooleanField()\n'
         if isinstance(value, list):
-            for v in value:
+            for v in range(0,len(value)):
                 fields += INDENTATION + name + '_' + v + ' = '
                 fields += 'models.BooleanField()\n'
         return fields
