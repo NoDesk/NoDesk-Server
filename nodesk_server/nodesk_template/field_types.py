@@ -39,11 +39,11 @@ def checkbox_field():
         # (with a inner function computing the string for a value)
         if isinstance(value, str):
             fields += INDENTATION + name + '_0' + ' = '
-            fields += 'models.BooleanField(blank=True, null=True)\n'
+            fields += 'models.BooleanField(initial=False)\n'
         if isinstance(value, list):
             for v in range(0,len(value)):
                 fields += INDENTATION + name + '_' + v + ' = '
-                fields += 'models.BooleanField(blank=True, null=True)\n'
+                fields += 'models.BooleanField(initial=False)\n'
         return fields
 
     return func
