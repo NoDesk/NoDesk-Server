@@ -1,6 +1,6 @@
 #Template HTTP API
 
-The template API is accessible at the URL : http://<NODESK_URL>/template/<TEMPLATE_API>.
+The template API is accessible at the URL : http://\<NODESK_URL\>/template/\<TEMPLATE_API\>.
 Depending on <TEMPLATE_API>, you can access the different part of the API (describe by a regex) :
 
 ##'^$' : nothing
