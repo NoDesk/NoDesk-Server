@@ -42,7 +42,7 @@ def checkbox_field():
             fields += 'models.BooleanField(default=False)\n'
         if isinstance(value, list):
             for v in range(0,len(value)):
-                fields += INDENTATION + name + '_' + v + ' = '
+                fields += INDENTATION + name + '_' + str(v) + ' = '
                 fields += 'models.BooleanField(default=False)\n'
         return fields
 
