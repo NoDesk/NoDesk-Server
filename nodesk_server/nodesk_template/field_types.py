@@ -19,7 +19,7 @@ def media_field(field):
 def radiobox_field():
     # FIXME: add choices argument (from value)
     def func(name, value):
-        field_string = INDENTATION + 'models.CharField(choices=CHOICES_%s)\n' % name
+        field_string = INDENTATION + 'models.CharField(blank=True, null=True,choices=CHOICES_%s)\n' % name
         choices_string = INDENTATION + 'CHOICES_' + name + ' = (\n'
         if isinstance(value, str):
             choices_string += INDENTATION*2 + "('%s','%s')\n" % (value, value)
@@ -39,11 +39,11 @@ def checkbox_field():
         # (with a inner function computing the string for a value)
         if isinstance(value, str):
             fields += INDENTATION + name + '_0' + ' = '
-            fields += 'models.BooleanField()\n'
+            fields += 'models.BooleanField(blank=True, null=True)\n'
         if isinstance(value, list):
             for v in range(0,len(value)):
                 fields += INDENTATION + name + '_' + v + ' = '
-                fields += 'models.BooleanField()\n'
+                fields += 'models.BooleanField(blank=True, null=True)\n'
         return fields
 
     return func
