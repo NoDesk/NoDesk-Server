@@ -31,7 +31,7 @@ class TemplateFieldForm(forms.Form):
                 ('Sound','Sound'),
                 ('Video','Video'),
                 ('Coordinates','Coordinates'),
-                ('Data','Date'),
+                ('Date','Date'),
                 ('Time','Time'),
                 ('User','User'),
                 ('Creator','Creator'),
